@@ -386,7 +386,7 @@
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#proses-crawling-untuk-setiap-kata-kunci"><strong>Proses crawling untuk setiap kata kunci</strong></a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#mengecek-apakah-request-berhasil"><strong>Mengecek apakah request berhasil</strong></a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#menyimpan-data-penting-dari-hasil-pencarian"><strong>Menyimpan data penting dari hasil pencarian</strong></a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><strong>Menyimpan data penting dari hasil pencarian</strong></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#menyimpan-hasil-ke-file-csv"><strong>Menyimpan hasil ke file CSV</strong></a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#mengunduh-file-csv"><strong>Mengunduh file CSV</strong></a></li>
 </ul>
 
@@ -410,8 +410,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Collecting sprynger
-  Downloading sprynger-0.4.1-py3-none-any.whl.metadata (5.8 kB)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: sprynger in c:\users\vania\appdata\local\programs\python\python311\lib\site-packages (0.4.1)
 Requirement already satisfied: lxml in c:\users\vania\appdata\local\programs\python\python311\lib\site-packages (from sprynger) (5.3.1)
 Requirement already satisfied: requests in c:\users\vania\appdata\local\programs\python\python311\lib\site-packages (from sprynger) (2.32.3)
 Requirement already satisfied: urllib3 in c:\users\vania\appdata\local\programs\python\python311\lib\site-packages (from sprynger) (2.2.3)
@@ -419,9 +418,6 @@ Requirement already satisfied: platformdirs in c:\users\vania\appdata\local\prog
 Requirement already satisfied: charset-normalizer&lt;4,&gt;=2 in c:\users\vania\appdata\local\programs\python\python311\lib\site-packages (from requests-&gt;sprynger) (3.4.0)
 Requirement already satisfied: idna&lt;4,&gt;=2.5 in c:\users\vania\appdata\local\programs\python\python311\lib\site-packages (from requests-&gt;sprynger) (3.10)
 Requirement already satisfied: certifi&gt;=2017.4.17 in c:\users\vania\appdata\local\programs\python\python311\lib\site-packages (from requests-&gt;sprynger) (2024.8.30)
-Downloading sprynger-0.4.1-py3-none-any.whl (40 kB)
-Installing collected packages: sprynger
-Successfully installed sprynger-0.4.1
 Note: you may need to restart the kernel to use updated packages.
 </pre></div>
 </div>
@@ -536,8 +532,8 @@ Note: you may need to restart the kernel to use updated packages.
 </div>
 <p>Kode ini menyimpan tiap artikel dari data[‘records’] ke dalam all_results dengan informasi seperti keyword, DOI, judul, publikasi, tanggal, URL, dan abstrak, sambil memberi nilai default jika data tidak ada.</p>
 </section>
-<section class="tex2jax_ignore mathjax_ignore" id="id1">
-<h1><strong>Menyimpan data penting dari hasil pencarian</strong><a class="headerlink" href="#id1" title="Link to this heading">#</a></h1>
+<section class="tex2jax_ignore mathjax_ignore" id="menyimpan-hasil-ke-file-csv">
+<h1><strong>Menyimpan hasil ke file CSV</strong><a class="headerlink" href="#menyimpan-hasil-ke-file-csv" title="Link to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;springer_crawling.csv&quot;</span>
@@ -608,7 +604,7 @@ Note: you may need to restart the kernel to use updated packages.
     }
   </script><script type="application/javascript">download("download_3a1595fb-d158-442d-a19b-717088e0996a", "springer_crawling.csv", 30990)</script></div>
 </div>
-<p>Kode ini digunakan di Google Colab untuk mengunduh file hasil penyimpanan. Baris pertama mengimpor modul **files ** dari <strong>google.colab</strong>, lalu baris kedua memanggil fungsi files.download() agar file <strong>springer_crawling.csv</strong> yang sudah dibuat bisa langsung diunduh ke komputer pengguna.</p>
+<p>Kode ini digunakan di Google Colab untuk mengunduh file hasil penyimpanan. Baris pertama mengimpor modul <strong>files</strong> dari <strong>google.colab</strong>, lalu baris kedua memanggil fungsi files.download() agar file <strong>springer_crawling.csv</strong> yang sudah dibuat bisa langsung diunduh ke komputer pengguna.</p>
 </section>
 
     <script type="text/x-thebe-config">
@@ -675,7 +671,7 @@ Note: you may need to restart the kernel to use updated packages.
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#proses-crawling-untuk-setiap-kata-kunci"><strong>Proses crawling untuk setiap kata kunci</strong></a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#mengecek-apakah-request-berhasil"><strong>Mengecek apakah request berhasil</strong></a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#menyimpan-data-penting-dari-hasil-pencarian"><strong>Menyimpan data penting dari hasil pencarian</strong></a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><strong>Menyimpan data penting dari hasil pencarian</strong></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#menyimpan-hasil-ke-file-csv"><strong>Menyimpan hasil ke file CSV</strong></a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#mengunduh-file-csv"><strong>Mengunduh file CSV</strong></a></li>
 </ul>
 
