@@ -458,9 +458,6 @@ Requirement already satisfied: colorama in c:\users\raihan fadillah\appdata\loca
 </div>
 </div>
 </div>
-</section>
-<section id="preprocessing-crawling-pta">
-<h2>Preprocessing Crawling PTA<a class="headerlink" href="#preprocessing-crawling-pta" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
@@ -468,108 +465,18 @@ Requirement already satisfied: colorama in c:\users\raihan fadillah\appdata\loca
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">string</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">Sastrawi.Stemmer.StemmerFactory</span><span class="w"> </span><span class="kn">import</span> <span class="n">StemmerFactory</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">spellchecker</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpellChecker</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span>
 
-<span class="c1"># --- KONFIGURASI PRA-PEMROSESAN ---</span>
-<span class="c1"># Kamus untuk normalisasi kata slang/kontraksi bahasa Indonesia</span>
-<span class="n">contractions_dict</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;gak&quot;</span><span class="p">:</span> <span class="s2">&quot;tidak&quot;</span><span class="p">,</span> <span class="s2">&quot;ga&quot;</span><span class="p">:</span> <span class="s2">&quot;tidak&quot;</span><span class="p">,</span> <span class="s2">&quot;nggak&quot;</span><span class="p">:</span> <span class="s2">&quot;tidak&quot;</span><span class="p">,</span> <span class="s2">&quot;enggak&quot;</span><span class="p">:</span> <span class="s2">&quot;tidak&quot;</span><span class="p">,</span> <span class="s2">&quot;ngga&quot;</span><span class="p">:</span> <span class="s2">&quot;tidak&quot;</span><span class="p">,</span> <span class="s2">&quot;gk&quot;</span><span class="p">:</span> <span class="s2">&quot;tidak&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;gue&quot;</span><span class="p">:</span> <span class="s2">&quot;saya&quot;</span><span class="p">,</span> <span class="s2">&quot;gw&quot;</span><span class="p">:</span> <span class="s2">&quot;saya&quot;</span><span class="p">,</span> <span class="s2">&quot;gua&quot;</span><span class="p">:</span> <span class="s2">&quot;saya&quot;</span><span class="p">,</span> <span class="s2">&quot;lu&quot;</span><span class="p">:</span> <span class="s2">&quot;kamu&quot;</span><span class="p">,</span> <span class="s2">&quot;loe&quot;</span><span class="p">:</span> <span class="s2">&quot;kamu&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;dah&quot;</span><span class="p">:</span> <span class="s2">&quot;sudah&quot;</span><span class="p">,</span> <span class="s2">&quot;udah&quot;</span><span class="p">:</span> <span class="s2">&quot;sudah&quot;</span><span class="p">,</span> <span class="s2">&quot;aja&quot;</span><span class="p">:</span> <span class="s2">&quot;saja&quot;</span><span class="p">,</span> <span class="s2">&quot;ajah&quot;</span><span class="p">:</span> <span class="s2">&quot;saja&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;yg&quot;</span><span class="p">:</span> <span class="s2">&quot;yang&quot;</span><span class="p">,</span> <span class="s2">&quot;utk&quot;</span><span class="p">:</span> <span class="s2">&quot;untuk&quot;</span><span class="p">,</span> <span class="s2">&quot;dlm&quot;</span><span class="p">:</span> <span class="s2">&quot;dalam&quot;</span><span class="p">,</span> <span class="s2">&quot;dr&quot;</span><span class="p">:</span> <span class="s2">&quot;dari&quot;</span><span class="p">,</span> <span class="s2">&quot;dg&quot;</span><span class="p">:</span> <span class="s2">&quot;dengan&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;jd&quot;</span><span class="p">:</span> <span class="s2">&quot;jadi&quot;</span><span class="p">,</span> <span class="s2">&quot;krn&quot;</span><span class="p">:</span> <span class="s2">&quot;karena&quot;</span><span class="p">,</span> <span class="s2">&quot;tp&quot;</span><span class="p">:</span> <span class="s2">&quot;tetapi&quot;</span><span class="p">,</span> <span class="s2">&quot;tapi&quot;</span><span class="p">:</span> <span class="s2">&quot;tetapi&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;banget&quot;</span><span class="p">:</span> <span class="s2">&quot;sekali&quot;</span><span class="p">,</span> <span class="s2">&quot;bgt&quot;</span><span class="p">:</span> <span class="s2">&quot;sekali&quot;</span><span class="p">,</span> <span class="s2">&quot;lg&quot;</span><span class="p">:</span> <span class="s2">&quot;lagi&quot;</span><span class="p">,</span>
-<span class="p">}</span>
-
-<span class="c1"># Daftar stopword bahasa Indonesia</span>
-<span class="n">stop_words</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span>
-    <span class="s2">&quot;yang&quot;</span><span class="p">,</span> <span class="s2">&quot;di&quot;</span><span class="p">,</span> <span class="s2">&quot;ke&quot;</span><span class="p">,</span> <span class="s2">&quot;dan&quot;</span><span class="p">,</span> <span class="s2">&quot;dari&quot;</span><span class="p">,</span> <span class="s2">&quot;ini&quot;</span><span class="p">,</span> <span class="s2">&quot;itu&quot;</span><span class="p">,</span> <span class="s2">&quot;pada&quot;</span><span class="p">,</span> <span class="s2">&quot;untuk&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;dengan&quot;</span><span class="p">,</span> <span class="s2">&quot;sebagai&quot;</span><span class="p">,</span> <span class="s2">&quot;adalah&quot;</span><span class="p">,</span> <span class="s2">&quot;merupakan&quot;</span><span class="p">,</span> <span class="s2">&quot;dalam&quot;</span><span class="p">,</span> <span class="s2">&quot;yaitu&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;suatu&quot;</span><span class="p">,</span> <span class="s2">&quot;sebuah&quot;</span><span class="p">,</span> <span class="s2">&quot;dengan&quot;</span><span class="p">,</span> <span class="s2">&quot;akan&quot;</span><span class="p">,</span> <span class="s2">&quot;telah&quot;</span><span class="p">,</span> <span class="s2">&quot;bisa&quot;</span><span class="p">,</span> <span class="s2">&quot;agar&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;dari&quot;</span><span class="p">,</span> <span class="s2">&quot;oleh&quot;</span><span class="p">,</span> <span class="s2">&quot;hal&quot;</span><span class="p">,</span> <span class="s2">&quot;saat&quot;</span><span class="p">,</span> <span class="s2">&quot;bahwa&quot;</span><span class="p">,</span> <span class="s2">&quot;juga&quot;</span><span class="p">,</span> <span class="s2">&quot;atau&quot;</span><span class="p">,</span> <span class="s2">&quot;tidak&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;namun&quot;</span><span class="p">,</span> <span class="s2">&quot;tetapi&quot;</span><span class="p">,</span> <span class="s2">&quot;kemudian&quot;</span><span class="p">,</span> <span class="s2">&quot;sehingga&quot;</span><span class="p">,</span> <span class="s2">&quot;serta&quot;</span><span class="p">,</span> <span class="s2">&quot;guna&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;seperti&quot;</span><span class="p">,</span> <span class="s2">&quot;yaitu&quot;</span><span class="p">,</span> <span class="s2">&quot;melalui&quot;</span><span class="p">,</span> <span class="s2">&quot;terhadap&quot;</span><span class="p">,</span> <span class="s2">&quot;seperti&quot;</span><span class="p">,</span> <span class="s2">&quot;sejak&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;saja&quot;</span><span class="p">,</span> <span class="s2">&quot;hanya&quot;</span><span class="p">,</span> <span class="s2">&quot;oleh&quot;</span><span class="p">,</span> <span class="s2">&quot;pada&quot;</span><span class="p">,</span> <span class="s2">&quot;sampai&quot;</span><span class="p">,</span> <span class="s2">&quot;setelah&quot;</span><span class="p">,</span> <span class="s2">&quot;sebelum&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;karena&quot;</span><span class="p">,</span> <span class="s2">&quot;maka&quot;</span><span class="p">,</span> <span class="s2">&quot;tanpa&quot;</span>
-<span class="p">])</span>
-
-<span class="c1"># Inisialisasi Stemmer dari Sastrawi</span>
-<span class="n">factory</span> <span class="o">=</span> <span class="n">StemmerFactory</span><span class="p">()</span>
-<span class="n">stemmer</span> <span class="o">=</span> <span class="n">factory</span><span class="o">.</span><span class="n">create_stemmer</span><span class="p">()</span>
-
-<span class="c1"># Inisialisasi SpellChecker</span>
-<span class="n">spell</span> <span class="o">=</span> <span class="n">SpellChecker</span><span class="p">()</span>
-
-<span class="c1"># --- FUNGSI-FUNGSI PRA-PEMROSESAN TERPISAH ---</span>
-
-<span class="k">def</span><span class="w"> </span><span class="nf">clean_base_text</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Fungsi dasar untuk membersihkan teks dari simbol, angka, dll.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;&#39;</span>
-
-    <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-    <span class="n">words</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
-    <span class="n">expanded_words</span> <span class="o">=</span> <span class="p">[</span><span class="n">contractions_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">word</span><span class="p">)</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">]</span>
-    <span class="n">text</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">expanded_words</span><span class="p">)</span>
-
-    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\d+&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
-    <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="nb">str</span><span class="o">.</span><span class="n">maketrans</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">.</span><span class="n">punctuation</span><span class="p">))</span>
-    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\s+&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-    <span class="n">text</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="s2">&quot;html.parser&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get_text</span><span class="p">()</span>
-
-    <span class="k">return</span> <span class="n">text</span>
-
-<span class="k">def</span><span class="w"> </span><span class="nf">tokenize_text</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    # Proses: Tokenisasi</span>
-<span class="sd">    # Memisahkan teks menjadi daftar kata (token).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
-
-<span class="k">def</span><span class="w"> </span><span class="nf">remove_stopwords</span><span class="p">(</span><span class="n">tokens</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    # Proses: Penghapusan Kata Umum (Stopword)</span>
-<span class="sd">    # Menghapus kata-kata yang tidak memiliki makna penting dalam analisis teks.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="p">[</span><span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">tokens</span> <span class="k">if</span> <span class="n">word</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">stop_words</span><span class="p">]</span>
-
-<span class="k">def</span><span class="w"> </span><span class="nf">apply_stemming_and_lemmatization</span><span class="p">(</span><span class="n">tokens</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    # Proses: Stemming dan Lematisasi</span>
-<span class="sd">    # Mengubah kata berimbuhan menjadi kata dasar.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">text</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span>
-    <span class="n">stemmed_text</span> <span class="o">=</span> <span class="n">stemmer</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">stemmed_text</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
-
-<span class="k">def</span><span class="w"> </span><span class="nf">correct_spelling</span><span class="p">(</span><span class="n">tokens</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    # Proses: Cek Ejaan Pembakuan Kata</span>
-<span class="sd">    # Memperbaiki ejaan kata.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">corrected_words</span> <span class="o">=</span> <span class="p">[</span><span class="n">spell</span><span class="o">.</span><span class="n">correction</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="k">if</span> <span class="n">spell</span><span class="o">.</span><span class="n">correction</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">tokens</span><span class="p">]</span>
-    <span class="k">return</span> <span class="n">corrected_words</span>
-
-<span class="c1"># --- FUNGSI-FUNGSI BANTUAN SCRAPING ---</span>
-
+<span class="c1"># --- Fungsi Bantu Scraping ---</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_text_or_na</span><span class="p">(</span><span class="n">soup</span><span class="p">,</span> <span class="n">selectors</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Mencoba beberapa selektor untuk menemukan teks, mengembalikan &#39;N/A&#39; jika tidak ditemukan.&quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">selector</span> <span class="ow">in</span> <span class="n">selectors</span><span class="p">:</span>
         <span class="n">element</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">select_one</span><span class="p">(</span><span class="n">selector</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">element</span><span class="p">:</span>
             <span class="n">text</span> <span class="o">=</span> <span class="n">element</span><span class="o">.</span><span class="n">get_text</span><span class="p">(</span><span class="n">strip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">text</span> <span class="ow">and</span> <span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">text</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
     <span class="k">return</span> <span class="s1">&#39;N/A&#39;</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">get_data_from_span</span><span class="p">(</span><span class="n">soup</span><span class="p">,</span> <span class="n">text_contains</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Mencari span yang berisi teks tertentu dan mengekstrak nama setelah titik dua.&quot;&quot;&quot;</span>
     <span class="n">span</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">select_one</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;span:-soup-contains(&quot;</span><span class="si">{</span><span class="n">text_contains</span><span class="si">}</span><span class="s1">&quot;)&#39;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">span</span><span class="p">:</span>
         <span class="n">text</span> <span class="o">=</span> <span class="n">span</span><span class="o">.</span><span class="n">get_text</span><span class="p">(</span><span class="n">strip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -578,10 +485,6 @@ Requirement already satisfied: colorama in c:\users\raihan fadillah\appdata\loca
     <span class="k">return</span> <span class="s1">&#39;N/A&#39;</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">get_abstract_robust</span><span class="p">(</span><span class="n">soup</span><span class="p">,</span> <span class="n">keywords</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Mencari tag heading (b) yang teksnya mengandung salah satu dari kata kunci</span>
-<span class="sd">    dan mengekstrak paragraf berikutnya.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">tag_b</span> <span class="ow">in</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">):</span>
         <span class="n">tag_text</span> <span class="o">=</span> <span class="n">tag_b</span><span class="o">.</span><span class="n">get_text</span><span class="p">(</span><span class="n">strip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">keyword</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">tag_text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">keyword</span> <span class="ow">in</span> <span class="n">keywords</span><span class="p">):</span>
@@ -591,53 +494,31 @@ Requirement already satisfied: colorama in c:\users\raihan fadillah\appdata\loca
                 <span class="k">if</span> <span class="n">next_div_sibling</span><span class="p">:</span>
                     <span class="n">p_tag</span> <span class="o">=</span> <span class="n">next_div_sibling</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;p&#39;</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="s2">&quot;justify&quot;</span><span class="p">)</span>
                     <span class="k">if</span> <span class="n">p_tag</span><span class="p">:</span>
-                        <span class="n">abstract_text</span> <span class="o">=</span> <span class="n">p_tag</span><span class="o">.</span><span class="n">get_text</span><span class="p">(</span><span class="n">strip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-                        <span class="k">if</span> <span class="n">abstract_text</span><span class="p">:</span>
-                            <span class="k">return</span> <span class="n">abstract_text</span>
+                        <span class="k">return</span> <span class="n">p_tag</span><span class="o">.</span><span class="n">get_text</span><span class="p">(</span><span class="n">strip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">return</span> <span class="s1">&#39;N/A&#39;</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">get_total_pages</span><span class="p">(</span><span class="n">soup</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Mengekstrak total jumlah halaman dari navigasi paginasi.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">pagination</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">select_one</span><span class="p">(</span><span class="s1">&#39;ol.pagination&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">pagination</span><span class="p">:</span>
             <span class="n">last_page_li</span> <span class="o">=</span> <span class="n">pagination</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;li&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
             <span class="n">last_page_link</span> <span class="o">=</span> <span class="n">last_page_li</span><span class="o">.</span><span class="n">select_one</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">last_page_link</span> <span class="ow">and</span> <span class="s1">&#39;href&#39;</span> <span class="ow">in</span> <span class="n">last_page_link</span><span class="o">.</span><span class="n">attrs</span><span class="p">:</span>
-                <span class="n">url_path</span> <span class="o">=</span> <span class="n">last_page_link</span><span class="p">[</span><span class="s1">&#39;href&#39;</span><span class="p">]</span>
-                <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">url_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-    <span class="k">except</span> <span class="p">(</span><span class="ne">IndexError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">,</span> <span class="ne">KeyError</span><span class="p">):</span>
+                <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">last_page_link</span><span class="p">[</span><span class="s1">&#39;href&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">except</span><span class="p">:</span>
         <span class="k">pass</span>
     <span class="k">return</span> <span class="mi">1</span>
 
-<span class="c1"># --- FUNGSI UTAMA SCRAPING ---</span>
-
-<span class="k">def</span><span class="w"> </span><span class="nf">scrape_manajemen_all_data</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Menjalankan proses scraping dan pra-pemrosesan data secara keseluruhan.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">prodi_data</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Manajemen&#39;</span><span class="p">,</span> <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://pta.trunojoyo.ac.id/c_search/byprod/7&#39;</span><span class="p">},</span>
-    <span class="p">]</span>
-
-    <span class="n">all_scraped_data</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;penulis&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;judul&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;pembimbing_pertama&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;pembimbing_kedua&quot;</span><span class="p">:</span> <span class="p">[],</span>
-        <span class="s2">&quot;abstrak_indonesia_raw&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;abstrak_inggris_raw&quot;</span><span class="p">:</span> <span class="p">[],</span>
-        <span class="s2">&quot;abstrak_indonesia_clean&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;abstrak_inggris_clean&quot;</span><span class="p">:</span> <span class="p">[],</span>
-        <span class="s2">&quot;abstrak_indonesia_stopwords&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;abstrak_inggris_stopwords&quot;</span><span class="p">:</span> <span class="p">[],</span>
-        <span class="s2">&quot;abstrak_indonesia_stemmed&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;abstrak_inggris_stemmed&quot;</span><span class="p">:</span> <span class="p">[],</span>
-        <span class="s2">&quot;abstrak_indonesia_corrected&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;abstrak_inggris_corrected&quot;</span><span class="p">:</span> <span class="p">[],</span>
-        <span class="s2">&quot;prodi&quot;</span><span class="p">:</span> <span class="p">[]</span>
-    <span class="p">}</span>
+<span class="c1"># --- Fungsi Scraping ---</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">scrape_manajemen_raw</span><span class="p">():</span>
+    <span class="n">prodi_data</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Manajemen&#39;</span><span class="p">,</span> <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://pta.trunojoyo.ac.id/c_search/byprod/7&#39;</span><span class="p">}]</span>
+    <span class="n">all_data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;penulis&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;judul&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;pembimbing_pertama&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;pembimbing_kedua&quot;</span><span class="p">:</span> <span class="p">[],</span>
+                <span class="s2">&quot;abstrak_indonesia&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;abstrak_inggris&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;prodi&quot;</span><span class="p">:</span> <span class="p">[]}</span>
 
     <span class="n">total_data_count</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;--- MULAI PROSES SCRAPING Prodi Manajemen ---&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;--- MULAI SCRAPING (RAW DATA) ---&quot;</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">prodi</span> <span class="ow">in</span> <span class="n">prodi_data</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Scraping data for program: </span><span class="si">{</span><span class="n">prodi</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">50</span><span class="p">)</span>
         <span class="n">first_page_url</span> <span class="o">=</span> <span class="n">prodi</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">]</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">first_page_url</span><span class="p">)</span>
@@ -645,8 +526,7 @@ Requirement already satisfied: colorama in c:\users\raihan fadillah\appdata\loca
             <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="p">,</span> <span class="s2">&quot;html.parser&quot;</span><span class="p">)</span>
             <span class="n">total_pages</span> <span class="o">=</span> <span class="n">get_total_pages</span><span class="p">(</span><span class="n">soup</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ditemukan </span><span class="si">{</span><span class="n">total_pages</span><span class="si">}</span><span class="s2"> halaman untuk </span><span class="si">{</span><span class="n">prodi</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">RequestException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ERROR: Gagal mengambil halaman pertama untuk </span><span class="si">{</span><span class="n">prodi</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
             <span class="n">total_pages</span> <span class="o">=</span> <span class="mi">1</span>
 
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">total_pages</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
@@ -658,7 +538,6 @@ Requirement already satisfied: colorama in c:\users\raihan fadillah\appdata\loca
                 <span class="n">jurnals</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;li[data-cat=&quot;#luxury&quot;]&#39;</span><span class="p">)</span>
 
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">jurnals</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tidak ada jurnal lagi di halaman </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">. Berhenti untuk program ini.&quot;</span><span class="p">)</span>
                     <span class="k">break</span>
 
                 <span class="k">for</span> <span class="n">jurnal</span> <span class="ow">in</span> <span class="n">jurnals</span><span class="p">:</span>
@@ -676,165 +555,578 @@ Requirement already satisfied: colorama in c:\users\raihan fadillah\appdata\loca
                             <span class="n">abstrak_indonesia</span> <span class="o">=</span> <span class="n">get_abstract_robust</span><span class="p">(</span><span class="n">isi</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;Abstraksi&quot;</span><span class="p">,</span> <span class="s2">&quot;Abstrak&quot;</span><span class="p">])</span>
                             <span class="n">abstrak_inggris</span> <span class="o">=</span> <span class="n">get_abstract_robust</span><span class="p">(</span><span class="n">isi</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;Abstraction&quot;</span><span class="p">,</span> <span class="s2">&quot;Abstract&quot;</span><span class="p">,</span> <span class="s2">&quot;ABSTRACT&quot;</span><span class="p">])</span>
 
-                            <span class="c1"># --- Rangkaian Proses Pra-pemrosesan Teks ---</span>
-
-                            <span class="c1"># 1. Pembersihan Dasar (lowercase, normalisasi slang, hapus simbol &amp; angka)</span>
-                            <span class="n">clean_indonesia_text</span> <span class="o">=</span> <span class="n">clean_base_text</span><span class="p">(</span><span class="n">abstrak_indonesia</span><span class="p">)</span>
-                            <span class="n">clean_inggris_text</span> <span class="o">=</span> <span class="n">clean_base_text</span><span class="p">(</span><span class="n">abstrak_inggris</span><span class="p">)</span>
-
-                            <span class="c1"># 2. Tokenisasi</span>
-                            <span class="n">tokens_indonesia</span> <span class="o">=</span> <span class="n">tokenize_text</span><span class="p">(</span><span class="n">clean_indonesia_text</span><span class="p">)</span>
-                            <span class="n">tokens_inggris</span> <span class="o">=</span> <span class="n">tokenize_text</span><span class="p">(</span><span class="n">clean_inggris_text</span><span class="p">)</span>
-
-                            <span class="c1"># 3. Penghapusan Stopword</span>
-                            <span class="n">stopwords_indonesia_tokens</span> <span class="o">=</span> <span class="n">remove_stopwords</span><span class="p">(</span><span class="n">tokens_indonesia</span><span class="p">)</span>
-                            <span class="n">stopwords_inggris_tokens</span> <span class="o">=</span> <span class="n">remove_stopwords</span><span class="p">(</span><span class="n">tokens_inggris</span><span class="p">)</span>
-
-                            <span class="c1"># 4. Stemming dan Lematisasi</span>
-                            <span class="n">stemmed_indonesia_tokens</span> <span class="o">=</span> <span class="n">apply_stemming_and_lemmatization</span><span class="p">(</span><span class="n">stopwords_indonesia_tokens</span><span class="p">)</span>
-                            <span class="n">stemmed_inggris_tokens</span> <span class="o">=</span> <span class="n">apply_stemming_and_lemmatization</span><span class="p">(</span><span class="n">stopwords_inggris_tokens</span><span class="p">)</span>
-
-                            <span class="c1"># 5. Cek Ejaan (Pembakuan Kata)</span>
-                            <span class="n">corrected_indonesia_tokens</span> <span class="o">=</span> <span class="n">correct_spelling</span><span class="p">(</span><span class="n">stemmed_indonesia_tokens</span><span class="p">)</span>
-                            <span class="n">corrected_inggris_tokens</span> <span class="o">=</span> <span class="n">correct_spelling</span><span class="p">(</span><span class="n">stemmed_inggris_tokens</span><span class="p">)</span>
-
-                            <span class="c1"># Menghitung frekuensi kata untuk abstrak yang sudah diproses</span>
-                            <span class="n">word_frequency_indonesia</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">stemmed_indonesia_tokens</span><span class="p">)</span>
-                            <span class="n">word_frequency_inggris</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">stemmed_inggris_tokens</span><span class="p">)</span>
-
-                            <span class="c1"># Menambahkan data ke dictionary</span>
-                            <span class="n">all_scraped_data</span><span class="p">[</span><span class="s2">&quot;penulis&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">penulis</span><span class="p">)</span>
-                            <span class="n">all_scraped_data</span><span class="p">[</span><span class="s2">&quot;judul&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">judul</span><span class="p">)</span>
-                            <span class="n">all_scraped_data</span><span class="p">[</span><span class="s2">&quot;pembimbing_pertama&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pembimbing_pertama</span><span class="p">)</span>
-                            <span class="n">all_scraped_data</span><span class="p">[</span><span class="s2">&quot;pembimbing_kedua&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pembimbing_kedua</span><span class="p">)</span>
-                            <span class="n">all_scraped_data</span><span class="p">[</span><span class="s2">&quot;prodi&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prodi</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
-                            <span class="n">all_scraped_data</span><span class="p">[</span><span class="s2">&quot;abstrak_indonesia_raw&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">abstrak_indonesia</span><span class="p">)</span>
-                            <span class="n">all_scraped_data</span><span class="p">[</span><span class="s2">&quot;abstrak_inggris_raw&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">abstrak_inggris</span><span class="p">)</span>
-                            <span class="n">all_scraped_data</span><span class="p">[</span><span class="s2">&quot;abstrak_indonesia_clean&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tokens_indonesia</span><span class="p">))</span>
-                            <span class="n">all_scraped_data</span><span class="p">[</span><span class="s2">&quot;abstrak_inggris_clean&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tokens_inggris</span><span class="p">))</span>
-                            <span class="n">all_scraped_data</span><span class="p">[</span><span class="s2">&quot;abstrak_indonesia_stopwords&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">stopwords_indonesia_tokens</span><span class="p">))</span>
-                            <span class="n">all_scraped_data</span><span class="p">[</span><span class="s2">&quot;abstrak_inggris_stopwords&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">stopwords_inggris_tokens</span><span class="p">))</span>
-                            <span class="n">all_scraped_data</span><span class="p">[</span><span class="s2">&quot;abstrak_indonesia_stemmed&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">stemmed_indonesia_tokens</span><span class="p">))</span>
-                            <span class="n">all_scraped_data</span><span class="p">[</span><span class="s2">&quot;abstrak_inggris_stemmed&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">stemmed_inggris_tokens</span><span class="p">))</span>
-                            <span class="n">all_scraped_data</span><span class="p">[</span><span class="s2">&quot;abstrak_indonesia_corrected&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">corrected_indonesia_tokens</span><span class="p">))</span>
-                            <span class="n">all_scraped_data</span><span class="p">[</span><span class="s2">&quot;abstrak_inggris_corrected&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">corrected_inggris_tokens</span><span class="p">))</span>
+                            <span class="n">all_data</span><span class="p">[</span><span class="s2">&quot;penulis&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">penulis</span><span class="p">)</span>
+                            <span class="n">all_data</span><span class="p">[</span><span class="s2">&quot;judul&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">judul</span><span class="p">)</span>
+                            <span class="n">all_data</span><span class="p">[</span><span class="s2">&quot;pembimbing_pertama&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pembimbing_pertama</span><span class="p">)</span>
+                            <span class="n">all_data</span><span class="p">[</span><span class="s2">&quot;pembimbing_kedua&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pembimbing_kedua</span><span class="p">)</span>
+                            <span class="n">all_data</span><span class="p">[</span><span class="s2">&quot;abstrak_indonesia&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">abstrak_indonesia</span><span class="p">)</span>
+                            <span class="n">all_data</span><span class="p">[</span><span class="s2">&quot;abstrak_inggris&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">abstrak_inggris</span><span class="p">)</span>
+                            <span class="n">all_data</span><span class="p">[</span><span class="s2">&quot;prodi&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prodi</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
 
                             <span class="n">total_data_count</span> <span class="o">+=</span> <span class="mi">1</span>
-                            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- Data #</span><span class="si">{</span><span class="n">total_data_count</span><span class="si">}</span><span class="s2"> ---&quot;</span><span class="p">)</span>
-                            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Prodi: </span><span class="si">{</span><span class="n">prodi</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-                            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Penulis: </span><span class="si">{</span><span class="n">penulis</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-                            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Judul: </span><span class="si">{</span><span class="n">judul</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-                            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pembimbing 1: </span><span class="si">{</span><span class="n">pembimbing_pertama</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-                            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pembimbing 2: </span><span class="si">{</span><span class="n">pembimbing_kedua</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-                            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Abstrak (Raw): </span><span class="si">{</span><span class="n">abstrak_indonesia</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-                            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Abstrak (Clean): </span><span class="si">{</span><span class="n">clean_indonesia_text</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-                            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Abstrak (Stopwords Removed): </span><span class="si">{</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">stopwords_indonesia_tokens</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-                            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Abstrak (Stemmed): </span><span class="si">{</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">stemmed_indonesia_tokens</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-                            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Abstrak (Corrected): </span><span class="si">{</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">corrected_indonesia_tokens</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-                            <span class="c1"># Output frekuensi kata</span>
-                            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- Tokenisasi (Perhitungan Jumlah Kata) ---&quot;</span><span class="p">)</span>
-                            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Frekuensi Kata (Indonesia): </span><span class="si">{</span><span class="n">word_frequency_indonesia</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-                            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Frekuensi Kata (Inggris): </span><span class="si">{</span><span class="n">word_frequency_inggris</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-                            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-------------------------------------------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-
+                            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Data ke-</span><span class="si">{</span><span class="n">total_data_count</span><span class="si">}</span><span class="s2"> berhasil diambil&quot;</span><span class="p">)</span>
                     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ERROR: Terjadi kesalahan saat memproses URL: </span><span class="si">{</span><span class="n">jurnal_url</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Gagal proses </span><span class="si">{</span><span class="n">jurnal_url</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
 
                 <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
-            <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">RequestException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ERROR: Gagal mengambil URL </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Gagal ambil URL </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
                 <span class="k">continue</span>
 
-    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">all_scraped_data</span><span class="p">)</span>
-    <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;pta_manajemen_all_preprocessing_steps.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">---&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Scraping selesai. Total data yang diambil: </span><span class="si">{</span><span class="n">total_data_count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Data disimpan ke pta_manajemen_all_preprocessing_steps.csv&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;---&quot;</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">all_data</span><span class="p">)</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;pta_manajemen_raw.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✅ Scraping selesai. Total data: </span><span class="si">{</span><span class="n">total_data_count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Data disimpan di pta_manajemen_raw.csv&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">df</span>
 
-<span class="c1"># Menjalankan fungsi utama</span>
-<span class="n">scrape_manajemen_all_data</span><span class="p">()</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">scrape_manajemen_raw</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>--- MULAI PROSES SCRAPING Prodi Manajemen ---
-
-Scraping data for program: Manajemen
---------------------------------------------------
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>--- MULAI SCRAPING (RAW DATA) ---
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Ditemukan 207 halaman untuk Manajemen
 </pre></div>
 </div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Data ke-1 berhasil diambil
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Data ke-2 berhasil diambil
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Data ke-3 berhasil diambil
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Data ke-4 berhasil diambil
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Data ke-5 berhasil diambil
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Data ke-6 berhasil diambil
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Data ke-7 berhasil diambil
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Data ke-8 berhasil diambil
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Data ke-9 berhasil diambil
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Data ke-10 berhasil diambil
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Data ke-11 berhasil diambil
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Data ke-12 berhasil diambil
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Data ke-13 berhasil diambil
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Data ke-14 berhasil diambil
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Data ke-15 berhasil diambil
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Data ke-16 berhasil diambil
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Data ke-17 berhasil diambil
+</pre></div>
+</div>
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">KeyboardInterrupt</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">line</span> <span class="mi">294</span>
-<span class="g g-Whitespace">    </span><span class="mi">291</span>     <span class="k">return</span> <span class="n">df</span>
-<span class="g g-Whitespace">    </span><span class="mi">293</span> <span class="c1"># Menjalankan fungsi utama</span>
-<span class="ne">--&gt; </span><span class="mi">294</span> <span class="n">scrape_manajemen_all_data</span><span class="p">()</span>
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">line</span> <span class="mi">122</span>
+<span class="g g-Whitespace">    </span><span class="mi">119</span>     <span class="k">return</span> <span class="n">df</span>
+<span class="g g-Whitespace">    </span><span class="mi">121</span> <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">122</span>     <span class="n">scrape_manajemen_raw</span><span class="p">()</span>
 
-<span class="nn">Cell In[3], line 233,</span> in <span class="ni">scrape_manajemen_all_data</span><span class="nt">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">230</span> <span class="n">stemmed_inggris_tokens</span> <span class="o">=</span> <span class="n">apply_stemming_and_lemmatization</span><span class="p">(</span><span class="n">stopwords_inggris_tokens</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">232</span> <span class="c1"># 5. Cek Ejaan (Pembakuan Kata)</span>
-<span class="ne">--&gt; </span><span class="mi">233</span> <span class="n">corrected_indonesia_tokens</span> <span class="o">=</span> <span class="n">correct_spelling</span><span class="p">(</span><span class="n">stemmed_indonesia_tokens</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">234</span> <span class="n">corrected_inggris_tokens</span> <span class="o">=</span> <span class="n">correct_spelling</span><span class="p">(</span><span class="n">stemmed_inggris_tokens</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">236</span> <span class="c1"># Menghitung frekuensi kata untuk abstrak yang sudah diproses</span>
+<span class="nn">Cell In[3], line 84,</span> in <span class="ni">scrape_manajemen_raw</span><span class="nt">()</span>
+<span class="g g-Whitespace">     </span><span class="mi">82</span> <span class="n">jurnal_url</span> <span class="o">=</span> <span class="n">jurnal</span><span class="o">.</span><span class="n">select_one</span><span class="p">(</span><span class="s1">&#39;a.gray.button&#39;</span><span class="p">)[</span><span class="s1">&#39;href&#39;</span><span class="p">]</span>
+<span class="g g-Whitespace">     </span><span class="mi">83</span> <span class="k">try</span><span class="p">:</span>
+<span class="ne">---&gt; </span><span class="mi">84</span>     <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">jurnal_url</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">85</span>     <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+<span class="g g-Whitespace">     </span><span class="mi">86</span>     <span class="n">soup1</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">,</span> <span class="s2">&quot;html.parser&quot;</span><span class="p">)</span>
 
-<span class="nn">Cell In[3], line 91,</span> in <span class="ni">correct_spelling</span><span class="nt">(tokens)</span>
-<span class="g g-Whitespace">     </span><span class="mi">86</span> <span class="k">def</span><span class="w"> </span><span class="nf">correct_spelling</span><span class="p">(</span><span class="n">tokens</span><span class="p">):</span>
-<span class="g g-Whitespace">     </span><span class="mi">87</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="g g-Whitespace">     </span><span class="mi">88</span><span class="sd">     # Proses: Cek Ejaan Pembakuan Kata</span>
-<span class="g g-Whitespace">     </span><span class="mi">89</span><span class="sd">     # Memperbaiki ejaan kata.</span>
-<span class="g g-Whitespace">     </span><span class="mi">90</span><span class="sd">     &quot;&quot;&quot;</span>
-<span class="ne">---&gt; </span><span class="mi">91</span>     <span class="n">corrected_words</span> <span class="o">=</span> <span class="p">[</span><span class="n">spell</span><span class="o">.</span><span class="n">correction</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="k">if</span> <span class="n">spell</span><span class="o">.</span><span class="n">correction</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">tokens</span><span class="p">]</span>
-<span class="g g-Whitespace">     </span><span class="mi">92</span>     <span class="k">return</span> <span class="n">corrected_words</span>
+<span class="nn">File ~\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\api.py:73,</span> in <span class="ni">get</span><span class="nt">(url, params, **kwargs)</span>
+<span class="g g-Whitespace">     </span><span class="mi">62</span> <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="g g-Whitespace">     </span><span class="mi">63</span><span class="w">     </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Sends a GET request.</span>
+<span class="g g-Whitespace">     </span><span class="mi">64</span><span class="sd"> </span>
+<span class="g g-Whitespace">     </span><span class="mi">65</span><span class="sd">     :param url: URL for the new :class:`Request` object.</span>
+<span class="sd">   (...)     70     :rtype: requests.Response</span>
+<span class="g g-Whitespace">     </span><span class="mi">71</span><span class="sd">     &quot;&quot;&quot;</span>
+<span class="ne">---&gt; </span><span class="mi">73</span>     <span class="k">return</span> <span class="n">request</span><span class="p">(</span><span class="s2">&quot;get&quot;</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-<span class="nn">File ~\AppData\Local\Programs\Python\Python313\Lib\site-packages\spellchecker\spellchecker.py:159,</span> in <span class="ni">SpellChecker.correction</span><span class="nt">(self, word)</span>
-<span class="g g-Whitespace">    </span><span class="mi">152</span><span class="w"> </span><span class="sd">&quot;&quot;&quot;The most probable correct spelling for the word</span>
-<span class="g g-Whitespace">    </span><span class="mi">153</span><span class="sd"> </span>
-<span class="g g-Whitespace">    </span><span class="mi">154</span><span class="sd"> Args:</span>
-<span class="g g-Whitespace">    </span><span class="mi">155</span><span class="sd">     word (str): The word to correct</span>
-<span class="g g-Whitespace">    </span><span class="mi">156</span><span class="sd"> Returns:</span>
-<span class="g g-Whitespace">    </span><span class="mi">157</span><span class="sd">     str: The most likely candidate or None if no correction is present&quot;&quot;&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">158</span> <span class="n">word</span> <span class="o">=</span> <span class="n">ensure_unicode</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">159</span> <span class="n">candidates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">candidates</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">160</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">candidates</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">161</span>     <span class="k">return</span> <span class="kc">None</span>
+<span class="nn">File ~\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\api.py:59,</span> in <span class="ni">request</span><span class="nt">(method, url, **kwargs)</span>
+<span class="g g-Whitespace">     </span><span class="mi">55</span> <span class="c1"># By using the &#39;with&#39; statement we are sure the session is closed, thus we</span>
+<span class="g g-Whitespace">     </span><span class="mi">56</span> <span class="c1"># avoid leaving sockets open which can trigger a ResourceWarning in some</span>
+<span class="g g-Whitespace">     </span><span class="mi">57</span> <span class="c1"># cases, and look like a memory leak in others.</span>
+<span class="g g-Whitespace">     </span><span class="mi">58</span> <span class="k">with</span> <span class="n">sessions</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+<span class="ne">---&gt; </span><span class="mi">59</span>     <span class="k">return</span> <span class="n">session</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-<span class="nn">File ~\AppData\Local\Programs\Python\Python313\Lib\site-packages\spellchecker\spellchecker.py:186,</span> in <span class="ni">SpellChecker.candidates</span><span class="nt">(self, word)</span>
-<span class="g g-Whitespace">    </span><span class="mi">184</span> <span class="c1"># if still not found, use the edit distance 1 to calc edit distance 2</span>
-<span class="g g-Whitespace">    </span><span class="mi">185</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_distance</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">186</span>     <span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">known</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__edit_distance_alt</span><span class="p">(</span><span class="n">res</span><span class="p">)))</span>
-<span class="g g-Whitespace">    </span><span class="mi">187</span>     <span class="k">if</span> <span class="n">tmp</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">188</span>         <span class="k">return</span> <span class="n">tmp</span>
+<span class="nn">File ~\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\sessions.py:589,</span> in <span class="ni">Session.request</span><span class="nt">(self, method, url, params, data, headers, cookies, files, auth, timeout, allow_redirects, proxies, hooks, stream, verify, cert, json)</span>
+<span class="g g-Whitespace">    </span><span class="mi">584</span> <span class="n">send_kwargs</span> <span class="o">=</span> <span class="p">{</span>
+<span class="g g-Whitespace">    </span><span class="mi">585</span>     <span class="s2">&quot;timeout&quot;</span><span class="p">:</span> <span class="n">timeout</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">586</span>     <span class="s2">&quot;allow_redirects&quot;</span><span class="p">:</span> <span class="n">allow_redirects</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">587</span> <span class="p">}</span>
+<span class="g g-Whitespace">    </span><span class="mi">588</span> <span class="n">send_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">589</span> <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">prep</span><span class="p">,</span> <span class="o">**</span><span class="n">send_kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">591</span> <span class="k">return</span> <span class="n">resp</span>
 
-<span class="nn">File ~\AppData\Local\Programs\Python\Python313\Lib\site-packages\spellchecker\spellchecker.py:253,</span> in <span class="ni">SpellChecker.__edit_distance_alt</span><span class="nt">(self, words)</span>
-<span class="g g-Whitespace">    </span><span class="mi">251</span> <span class="n">tmp_words</span> <span class="o">=</span> <span class="p">[</span><span class="n">ensure_unicode</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">words</span><span class="p">]</span>
-<span class="g g-Whitespace">    </span><span class="mi">252</span> <span class="n">tmp</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_case_sensitive</span> <span class="k">else</span> <span class="n">w</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">tmp_words</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_if_should_check</span><span class="p">(</span><span class="n">w</span><span class="p">)]</span>
-<span class="ne">--&gt; </span><span class="mi">253</span> <span class="k">return</span> <span class="p">[</span><span class="n">e2</span> <span class="k">for</span> <span class="n">e1</span> <span class="ow">in</span> <span class="n">tmp</span> <span class="k">for</span> <span class="n">e2</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">known</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">edit_distance_1</span><span class="p">(</span><span class="n">e1</span><span class="p">))]</span>
+<span class="nn">File ~\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\sessions.py:703,</span> in <span class="ni">Session.send</span><span class="nt">(self, request, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">700</span> <span class="n">start</span> <span class="o">=</span> <span class="n">preferred_clock</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">702</span> <span class="c1"># Send the request</span>
+<span class="ne">--&gt; </span><span class="mi">703</span> <span class="n">r</span> <span class="o">=</span> <span class="n">adapter</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">705</span> <span class="c1"># Total elapsed time of the request (approximately)</span>
+<span class="g g-Whitespace">    </span><span class="mi">706</span> <span class="n">elapsed</span> <span class="o">=</span> <span class="n">preferred_clock</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span>
 
-<span class="nn">File ~\AppData\Local\Programs\Python\Python313\Lib\site-packages\spellchecker\spellchecker.py:200,</span> in <span class="ni">SpellChecker.known</span><span class="nt">(self, words)</span>
-<span class="g g-Whitespace">    </span><span class="mi">198</span> <span class="n">tmp_words</span> <span class="o">=</span> <span class="p">[</span><span class="n">ensure_unicode</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">words</span><span class="p">]</span>
-<span class="g g-Whitespace">    </span><span class="mi">199</span> <span class="n">tmp</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_case_sensitive</span> <span class="k">else</span> <span class="n">w</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">tmp_words</span><span class="p">]</span>
-<span class="ne">--&gt; </span><span class="mi">200</span> <span class="k">return</span> <span class="p">{</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">tmp</span> <span class="k">if</span> <span class="n">w</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_word_frequency</span><span class="o">.</span><span class="n">dictionary</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_if_should_check</span><span class="p">(</span><span class="n">w</span><span class="p">)}</span>
+<span class="nn">File ~\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\adapters.py:644,</span> in <span class="ni">HTTPAdapter.send</span><span class="nt">(self, request, stream, timeout, verify, cert, proxies)</span>
+<span class="g g-Whitespace">    </span><span class="mi">641</span>     <span class="n">timeout</span> <span class="o">=</span> <span class="n">TimeoutSauce</span><span class="p">(</span><span class="n">connect</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span> <span class="n">read</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">643</span> <span class="k">try</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">644</span>     <span class="n">resp</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">645</span>         <span class="n">method</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">method</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">646</span>         <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">647</span>         <span class="n">body</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">body</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">648</span>         <span class="n">headers</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">649</span>         <span class="n">redirect</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">650</span>         <span class="n">assert_same_host</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">651</span>         <span class="n">preload_content</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">652</span>         <span class="n">decode_content</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">653</span>         <span class="n">retries</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_retries</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">654</span>         <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">655</span>         <span class="n">chunked</span><span class="o">=</span><span class="n">chunked</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">656</span>     <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">658</span> <span class="k">except</span> <span class="p">(</span><span class="n">ProtocolError</span><span class="p">,</span> <span class="ne">OSError</span><span class="p">)</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">659</span>     <span class="k">raise</span> <span class="ne">ConnectionError</span><span class="p">(</span><span class="n">err</span><span class="p">,</span> <span class="n">request</span><span class="o">=</span><span class="n">request</span><span class="p">)</span>
 
-<span class="nn">File ~\AppData\Local\Programs\Python\Python313\Lib\site-packages\spellchecker\spellchecker.py:329,</span> in <span class="ni">WordFrequency.dictionary</span><span class="nt">(self)</span>
-<span class="g g-Whitespace">    </span><span class="mi">326</span>     <span class="n">key</span> <span class="o">=</span> <span class="n">ensure_unicode</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">327</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dictionary</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">key</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_case_sensitive</span> <span class="k">else</span> <span class="n">key</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">default</span><span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">329</span> <span class="nd">@property</span>
-<span class="g g-Whitespace">    </span><span class="mi">330</span> <span class="k">def</span><span class="w"> </span><span class="nf">dictionary</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
-<span class="g g-Whitespace">    </span><span class="mi">331</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;Counter: A counting dictionary of all words in the corpus and the number</span>
-<span class="g g-Whitespace">    </span><span class="mi">332</span><span class="sd">     of times each has been seen</span>
-<span class="g g-Whitespace">    </span><span class="mi">333</span><span class="sd"> </span>
-<span class="g g-Whitespace">    </span><span class="mi">334</span><span class="sd">     Note:</span>
-<span class="g g-Whitespace">    </span><span class="mi">335</span><span class="sd">         Not settable&quot;&quot;&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">336</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dictionary</span>
+<span class="nn">File ~\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py:787,</span> in <span class="ni">HTTPConnectionPool.urlopen</span><span class="nt">(self, method, url, body, headers, retries, redirect, assert_same_host, timeout, pool_timeout, release_conn, chunked, body_pos, preload_content, decode_content, **response_kw)</span>
+<span class="g g-Whitespace">    </span><span class="mi">784</span> <span class="n">response_conn</span> <span class="o">=</span> <span class="n">conn</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">release_conn</span> <span class="k">else</span> <span class="kc">None</span>
+<span class="g g-Whitespace">    </span><span class="mi">786</span> <span class="c1"># Make the request on the HTTPConnection object</span>
+<span class="ne">--&gt; </span><span class="mi">787</span> <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_request</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">788</span>     <span class="n">conn</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">789</span>     <span class="n">method</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">790</span>     <span class="n">url</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">791</span>     <span class="n">timeout</span><span class="o">=</span><span class="n">timeout_obj</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">792</span>     <span class="n">body</span><span class="o">=</span><span class="n">body</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">793</span>     <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">794</span>     <span class="n">chunked</span><span class="o">=</span><span class="n">chunked</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">795</span>     <span class="n">retries</span><span class="o">=</span><span class="n">retries</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">796</span>     <span class="n">response_conn</span><span class="o">=</span><span class="n">response_conn</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">797</span>     <span class="n">preload_content</span><span class="o">=</span><span class="n">preload_content</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">798</span>     <span class="n">decode_content</span><span class="o">=</span><span class="n">decode_content</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">799</span>     <span class="o">**</span><span class="n">response_kw</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">800</span> <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">802</span> <span class="c1"># Everything went great!</span>
+<span class="g g-Whitespace">    </span><span class="mi">803</span> <span class="n">clean_exit</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="nn">File ~\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py:534,</span> in <span class="ni">HTTPConnectionPool._make_request</span><span class="nt">(self, conn, method, url, body, headers, retries, timeout, chunked, response_conn, preload_content, decode_content, enforce_content_length)</span>
+<span class="g g-Whitespace">    </span><span class="mi">532</span> <span class="c1"># Receive the response from the server</span>
+<span class="g g-Whitespace">    </span><span class="mi">533</span> <span class="k">try</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">534</span>     <span class="n">response</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">getresponse</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">535</span> <span class="k">except</span> <span class="p">(</span><span class="n">BaseSSLError</span><span class="p">,</span> <span class="ne">OSError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">536</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_raise_timeout</span><span class="p">(</span><span class="n">err</span><span class="o">=</span><span class="n">e</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">timeout_value</span><span class="o">=</span><span class="n">read_timeout</span><span class="p">)</span>
+
+<span class="nn">File ~\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connection.py:565,</span> in <span class="ni">HTTPConnection.getresponse</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">562</span> <span class="n">_shutdown</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sock</span><span class="p">,</span> <span class="s2">&quot;shutdown&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">564</span> <span class="c1"># Get the response from http.client.HTTPConnection</span>
+<span class="ne">--&gt; </span><span class="mi">565</span> <span class="n">httplib_response</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">getresponse</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">567</span> <span class="k">try</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">568</span>     <span class="n">assert_header_parsing</span><span class="p">(</span><span class="n">httplib_response</span><span class="o">.</span><span class="n">msg</span><span class="p">)</span>
+
+<span class="nn">File ~\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1430,</span> in <span class="ni">HTTPConnection.getresponse</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1428</span> <span class="k">try</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1429</span>     <span class="k">try</span><span class="p">:</span>
+<span class="ne">-&gt; </span><span class="mi">1430</span>         <span class="n">response</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span>
+<span class="g g-Whitespace">   </span><span class="mi">1431</span>     <span class="k">except</span> <span class="ne">ConnectionError</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1432</span>         <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="nn">File ~\AppData\Local\Programs\Python\Python313\Lib\http\client.py:331,</span> in <span class="ni">HTTPResponse.begin</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">329</span> <span class="c1"># read until we get a non-100 response</span>
+<span class="g g-Whitespace">    </span><span class="mi">330</span> <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">331</span>     <span class="n">version</span><span class="p">,</span> <span class="n">status</span><span class="p">,</span> <span class="n">reason</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_status</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">332</span>     <span class="k">if</span> <span class="n">status</span> <span class="o">!=</span> <span class="n">CONTINUE</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">333</span>         <span class="k">break</span>
+
+<span class="nn">File ~\AppData\Local\Programs\Python\Python313\Lib\http\client.py:292,</span> in <span class="ni">HTTPResponse._read_status</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">291</span> <span class="k">def</span><span class="w"> </span><span class="nf">_read_status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="ne">--&gt; </span><span class="mi">292</span>     <span class="n">line</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fp</span><span class="o">.</span><span class="n">readline</span><span class="p">(</span><span class="n">_MAXLINE</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;iso-8859-1&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">293</span>     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">_MAXLINE</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">294</span>         <span class="k">raise</span> <span class="n">LineTooLong</span><span class="p">(</span><span class="s2">&quot;status line&quot;</span><span class="p">)</span>
+
+<span class="nn">File ~\AppData\Local\Programs\Python\Python313\Lib\socket.py:719,</span> in <span class="ni">SocketIO.readinto</span><span class="nt">(self, b)</span>
+<span class="g g-Whitespace">    </span><span class="mi">717</span>     <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="s2">&quot;cannot read from timed out object&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">718</span> <span class="k">try</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">719</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sock</span><span class="o">.</span><span class="n">recv_into</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">720</span> <span class="k">except</span> <span class="n">timeout</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">721</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_timeout_occurred</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="nn">File ~\AppData\Local\Programs\Python\Python313\Lib\ssl.py:1304,</span> in <span class="ni">SSLSocket.recv_into</span><span class="nt">(self, buffer, nbytes, flags)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1300</span>     <span class="k">if</span> <span class="n">flags</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1301</span>         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1302</span>           <span class="s2">&quot;non-zero flags not allowed in calls to recv_into() on </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span>
+<span class="g g-Whitespace">   </span><span class="mi">1303</span>           <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">)</span>
+<span class="ne">-&gt; </span><span class="mi">1304</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">nbytes</span><span class="p">,</span> <span class="n">buffer</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1305</span> <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1306</span>     <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">recv_into</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">nbytes</span><span class="p">,</span> <span class="n">flags</span><span class="p">)</span>
+
+<span class="nn">File ~\AppData\Local\Programs\Python\Python313\Lib\ssl.py:1138,</span> in <span class="ni">SSLSocket.read</span><span class="nt">(self, len, buffer)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1136</span> <span class="k">try</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1137</span>     <span class="k">if</span> <span class="n">buffer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+<span class="ne">-&gt; </span><span class="mi">1138</span>         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sslobj</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="nb">len</span><span class="p">,</span> <span class="n">buffer</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1139</span>     <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1140</span>         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sslobj</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="nb">len</span><span class="p">)</span>
 
 <span class="ne">KeyboardInterrupt</span>: 
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="c1"># baca file hasil scraping</span>
+<span class="n">df_raw</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;pta_manajemen_raw.csv&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=== DATA HASIL CRAWLING (RAW) ===&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df_raw</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>   <span class="c1"># tampilkan 10 baris pertama</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Jumlah data:&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">df_raw</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>=== DATA HASIL CRAWLING (RAW) ===
+                   penulis                                              judul  \
+0                  SATIYAH  PENGARUH FAKTOR-FAKTOR PELATIHAN DAN PENGEMBAN...   
+1                  Faishal  ANALISIS PERSEPSI BRAND ASSOCIATION MENURUT PE...   
+2          Wahyu Kurniawan  PENGARUH GAYA KEPEMIMPINAN DEMOKRATIK TERHADAP...   
+3   Muhammad Zakaria Utomo  Pengukuran Website Quality Pada Situs Sistem A...   
+4  Hendri Wahyudi Prayitno  PENGARUH KEPEMIMPINAN DAN KOMPENSASI TERHADAP ...   
+5               Aththaariq  PENGARUH KOMPETENSI DOSEN TERHADAP KINERJA DOS...   
+6           Haryono Arifin  PENGARUH PERILAKU KONSUMEN TERHADAP KEPUTUSAN ...   
+7       Dharma Abidin Syah  PENGARUH TIPE KEPEMIMPINAN TERHADAP PRESTASI K...   
+8            Toni Budianto  PENGARUH DIMENSI KUALITAS PELAYANAN TERHADAP K...   
+9     Iwan Kurniawan Gomes  ANALISIS TINGKAT RISIKO KREDIT \r\nPADA PD. BP...   
+
+                   pembimbing_pertama                        pembimbing_kedua  \
+0  Dra. Hj. S. Anugrahini Irawati, MM         Helmi Buyung Aulia,S,ST.SE,M.MT   
+1                     Nurita Andriani                    Yustina Chrismardani   
+2      Dr. Dra. Hj. Iriani Ismail, MM      Dra. Hj. S. Anugrahini Irawati, MM   
+3         Dr. Ir. Nurita Andriani, MM               Nirma Kurriwati, SP, M.Si   
+4   Dra. Hj. S Anugrahini Irawati, MM          Helmi Buyung Aulia,S,ST,SE,.MT   
+5      Dr.RM Moch Wispandono,.S.E,.MS  Dr. Muhammad Alkirom Wildan,S.E.,M.Si.   
+6          Dr. Ir Nurita Andriani, MM             Nirma Kurriwati, S.P., M.Si   
+7      Drs. Ec. Mudji Kuswinarno M,Si                           Faidal SE, MM   
+8   Bambang Setiyo Pambudi, S.E., MM.                    Fathor AS, S.E., MM.   
+9     Drs. Ec. Makhmud Zulkifli, M.Si                 Echsan Gani, S.E., M.SI   
+
+                                   abstrak_indonesia  \
+0  ABSTRAK\r\nSatiyah, Pengaruh Faktor-faktor Pel...   
+1  Tujuan penelitian ini adalah untuk mengetahui ...   
+2                                                NaN   
+3  Aplikasi nyata pemanfaatan teknologi informasi...   
+4  Abstrak\r\nPenelitian ini menggunakan metode k...   
+5  Abstrak\r\n\r\nAththaariq, Pengaruh Kompetensi...   
+6  ABSTRAK\r\nHaryono Arifin, Pengaruh Perilaku K...   
+7  ABSTRAK\r\n\tDharma Abidin Syah,Kesimpulan: (1...   
+8  ABSTRAK\r\n\r\nTujuan penelitian ini adalah un...   
+9  Hasil dari penelitian ini dari perhitungan Cre...   
+
+                                     abstrak_inggris      prodi  
+0  ABSTRACT\r\n\r\nIn an effort to increase labor...  Manajemen  
+1  This study wanted to know the brand associatio...  Manajemen  
+2                                                NaN  Manajemen  
+3  Academic portal system in University of Trunoj...  Manajemen  
+4  Abstract\r\nThis research use quantitative met...  Manajemen  
+5  Abstract\r\n\r\nThis study is aimed to analyze...  Manajemen  
+6  ABSTRACT\r\n\r\nHaryono Arifin, Influence Cons...  Manajemen  
+7  ABSTRACT\r\n\r\nDharma Abidin Syah,Conclusions...  Manajemen  
+8  ABSTRACT\r\n\r\nThe purpose of this study was ...  Manajemen  
+9  Results from this study of Credit Risk Ratio c...  Manajemen  
+
+Jumlah data: 1031
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="preprocessing-crawling-pta">
+<h2>Preprocessing Crawling PTA<a class="headerlink" href="#preprocessing-crawling-pta" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span><span class="o">,</span><span class="w"> </span><span class="nn">string</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bs4</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeautifulSoup</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">Sastrawi.Stemmer.StemmerFactory</span><span class="w"> </span><span class="kn">import</span> <span class="n">StemmerFactory</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">spellchecker</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpellChecker</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tqdm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>
+
+<span class="c1"># Setup tqdm untuk apply pandas</span>
+<span class="n">tqdm</span><span class="o">.</span><span class="n">pandas</span><span class="p">()</span>
+
+<span class="c1"># Kamus slang</span>
+<span class="n">contractions_dict</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;gak&quot;</span><span class="p">:</span> <span class="s2">&quot;tidak&quot;</span><span class="p">,</span> <span class="s2">&quot;ga&quot;</span><span class="p">:</span> <span class="s2">&quot;tidak&quot;</span><span class="p">,</span> <span class="s2">&quot;nggak&quot;</span><span class="p">:</span> <span class="s2">&quot;tidak&quot;</span><span class="p">,</span> <span class="s2">&quot;enggak&quot;</span><span class="p">:</span> <span class="s2">&quot;tidak&quot;</span><span class="p">,</span> <span class="s2">&quot;ngga&quot;</span><span class="p">:</span> <span class="s2">&quot;tidak&quot;</span><span class="p">,</span> <span class="s2">&quot;gk&quot;</span><span class="p">:</span> <span class="s2">&quot;tidak&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;gue&quot;</span><span class="p">:</span> <span class="s2">&quot;saya&quot;</span><span class="p">,</span> <span class="s2">&quot;gw&quot;</span><span class="p">:</span> <span class="s2">&quot;saya&quot;</span><span class="p">,</span> <span class="s2">&quot;gua&quot;</span><span class="p">:</span> <span class="s2">&quot;saya&quot;</span><span class="p">,</span> <span class="s2">&quot;lu&quot;</span><span class="p">:</span> <span class="s2">&quot;kamu&quot;</span><span class="p">,</span> <span class="s2">&quot;loe&quot;</span><span class="p">:</span> <span class="s2">&quot;kamu&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;dah&quot;</span><span class="p">:</span> <span class="s2">&quot;sudah&quot;</span><span class="p">,</span> <span class="s2">&quot;udah&quot;</span><span class="p">:</span> <span class="s2">&quot;sudah&quot;</span><span class="p">,</span> <span class="s2">&quot;aja&quot;</span><span class="p">:</span> <span class="s2">&quot;saja&quot;</span><span class="p">,</span> <span class="s2">&quot;yg&quot;</span><span class="p">:</span> <span class="s2">&quot;yang&quot;</span><span class="p">,</span> <span class="s2">&quot;utk&quot;</span><span class="p">:</span> <span class="s2">&quot;untuk&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;tp&quot;</span><span class="p">:</span> <span class="s2">&quot;tetapi&quot;</span><span class="p">,</span> <span class="s2">&quot;tapi&quot;</span><span class="p">:</span> <span class="s2">&quot;tetapi&quot;</span><span class="p">,</span> <span class="s2">&quot;bgt&quot;</span><span class="p">:</span> <span class="s2">&quot;sekali&quot;</span><span class="p">,</span> <span class="s2">&quot;lg&quot;</span><span class="p">:</span> <span class="s2">&quot;lagi&quot;</span>
+<span class="p">}</span>
+
+<span class="n">stop_words</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span>
+    <span class="s2">&quot;yang&quot;</span><span class="p">,</span><span class="s2">&quot;di&quot;</span><span class="p">,</span><span class="s2">&quot;ke&quot;</span><span class="p">,</span><span class="s2">&quot;dan&quot;</span><span class="p">,</span><span class="s2">&quot;dari&quot;</span><span class="p">,</span><span class="s2">&quot;ini&quot;</span><span class="p">,</span><span class="s2">&quot;itu&quot;</span><span class="p">,</span><span class="s2">&quot;pada&quot;</span><span class="p">,</span><span class="s2">&quot;untuk&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;dengan&quot;</span><span class="p">,</span><span class="s2">&quot;sebagai&quot;</span><span class="p">,</span><span class="s2">&quot;adalah&quot;</span><span class="p">,</span><span class="s2">&quot;merupakan&quot;</span><span class="p">,</span><span class="s2">&quot;dalam&quot;</span><span class="p">,</span><span class="s2">&quot;yaitu&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;suatu&quot;</span><span class="p">,</span><span class="s2">&quot;sebuah&quot;</span><span class="p">,</span><span class="s2">&quot;akan&quot;</span><span class="p">,</span><span class="s2">&quot;telah&quot;</span><span class="p">,</span><span class="s2">&quot;bisa&quot;</span><span class="p">,</span><span class="s2">&quot;agar&quot;</span><span class="p">,</span><span class="s2">&quot;oleh&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;bahwa&quot;</span><span class="p">,</span><span class="s2">&quot;juga&quot;</span><span class="p">,</span><span class="s2">&quot;atau&quot;</span><span class="p">,</span><span class="s2">&quot;tidak&quot;</span><span class="p">,</span><span class="s2">&quot;namun&quot;</span><span class="p">,</span><span class="s2">&quot;tetapi&quot;</span><span class="p">,</span><span class="s2">&quot;kemudian&quot;</span>
+<span class="p">])</span>
+
+<span class="c1"># Stemmer dan SpellChecker</span>
+<span class="n">factory</span> <span class="o">=</span> <span class="n">StemmerFactory</span><span class="p">()</span>
+<span class="n">stemmer</span> <span class="o">=</span> <span class="n">factory</span><span class="o">.</span><span class="n">create_stemmer</span><span class="p">()</span>
+<span class="n">spell</span> <span class="o">=</span> <span class="n">SpellChecker</span><span class="p">()</span>
+
+<span class="c1"># --- Fungsi Preprocessing ---</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">clean_base_text</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span> <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="n">words</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+    <span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="n">contractions_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">words</span><span class="p">]</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\d+&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="nb">str</span><span class="o">.</span><span class="n">maketrans</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">.</span><span class="n">punctuation</span><span class="p">))</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\s+&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="s2">&quot;html.parser&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get_text</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">text</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">tokenize</span><span class="p">(</span><span class="n">text</span><span class="p">):</span> <span class="k">return</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">remove_stopwords</span><span class="p">(</span><span class="n">tokens</span><span class="p">):</span> <span class="k">return</span> <span class="p">[</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">tokens</span> <span class="k">if</span> <span class="n">w</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">stop_words</span><span class="p">]</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">stemming</span><span class="p">(</span><span class="n">tokens</span><span class="p">):</span> <span class="k">return</span> <span class="n">stemmer</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tokens</span><span class="p">))</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">correct</span><span class="p">(</span><span class="n">tokens</span><span class="p">):</span> <span class="k">return</span> <span class="p">[</span><span class="n">spell</span><span class="o">.</span><span class="n">correction</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="ow">or</span> <span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">tokens</span><span class="p">]</span>
+
+<span class="c1"># --- Main Preprocessing ---</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">preprocess</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;📂 Membaca file CSV...&quot;</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;pta_manajemen_raw.csv&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✅ Dataset terbaca, jumlah data: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="si">}</span><span class="s2"> baris</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;🔄 Tahap 1: Cleaning...&quot;</span><span class="p">)</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;abstrak_indonesia_clean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;abstrak_indonesia&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">progress_apply</span><span class="p">(</span><span class="n">clean_base_text</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;🔄 Tahap 2: Tokenizing...&quot;</span><span class="p">)</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;abstrak_indonesia_tokens&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;abstrak_indonesia_clean&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">progress_apply</span><span class="p">(</span><span class="n">tokenize</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;🔄 Tahap 3: Remove Stopwords...&quot;</span><span class="p">)</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;abstrak_indonesia_stopwords&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;abstrak_indonesia_tokens&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">progress_apply</span><span class="p">(</span><span class="n">remove_stopwords</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;🔄 Tahap 4: Stemming...&quot;</span><span class="p">)</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;abstrak_indonesia_stemmed&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;abstrak_indonesia_stopwords&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">progress_apply</span><span class="p">(</span><span class="n">stemming</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;🔄 Tahap 5: Spell Correction...&quot;</span><span class="p">)</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;abstrak_indonesia_corrected&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;abstrak_indonesia_stemmed&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">progress_apply</span><span class="p">(</span><span class="n">correct</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;🔄 Tahap 6: Hitung Frekuensi Kata...&quot;</span><span class="p">)</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;frekuensi_kata_indonesia&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;abstrak_indonesia_stemmed&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">progress_apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="n">Counter</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">💾 Menyimpan hasil preprocessing ke pta_manajemen_preprocessed.csv...&quot;</span><span class="p">)</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;pta_manajemen_preprocessed.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✅ Preprocessing selesai.&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">preprocess</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>📂 Membaca file CSV...
+✅ Dataset terbaca, jumlah data: 1031 baris
+
+🔄 Tahap 1: Cleaning...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|████████████████████████████████████████████████████████████████████████████| 1031/1031 [00:00&lt;00:00, 4258.63it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🔄 Tahap 2: Tokenizing...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|███████████████████████████████████████████████████████████████████████████| 1031/1031 [00:00&lt;00:00, 79988.30it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🔄 Tahap 3: Remove Stopwords...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|███████████████████████████████████████████████████████████████████████████| 1031/1031 [00:00&lt;00:00, 48555.21it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🔄 Tahap 4: Stemming...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████████████████████████████████████████████████████████████████████████| 1031/1031 [08:47&lt;00:00,  1.96it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🔄 Tahap 5: Spell Correction...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|████████████████████████████████████████████████████████████████████████████| 1031/1031 [8:41:51&lt;00:00, 30.37s/it]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🔄 Tahap 6: Hitung Frekuensi Kata...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|███████████████████████████████████████████████████████████████████████████| 1031/1031 [00:00&lt;00:00, 31355.93it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>💾 Menyimpan hasil preprocessing ke pta_manajemen_preprocessed.csv...
+✅ Preprocessing selesai.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="c1"># baca file hasil preprocessing</span>
+<span class="n">df_pre</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;pta_manajemen_preprocessed.csv&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=== DATA HASIL PREPROCESSING ===&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df_pre</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>   <span class="c1"># tampilkan 10 baris pertama</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Jumlah data:&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">df_pre</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>=== DATA HASIL PREPROCESSING ===
+                   penulis                                              judul  \
+0                  SATIYAH  PENGARUH FAKTOR-FAKTOR PELATIHAN DAN PENGEMBAN...   
+1                  Faishal  ANALISIS PERSEPSI BRAND ASSOCIATION MENURUT PE...   
+2          Wahyu Kurniawan  PENGARUH GAYA KEPEMIMPINAN DEMOKRATIK TERHADAP...   
+3   Muhammad Zakaria Utomo  Pengukuran Website Quality Pada Situs Sistem A...   
+4  Hendri Wahyudi Prayitno  PENGARUH KEPEMIMPINAN DAN KOMPENSASI TERHADAP ...   
+5               Aththaariq  PENGARUH KOMPETENSI DOSEN TERHADAP KINERJA DOS...   
+6           Haryono Arifin  PENGARUH PERILAKU KONSUMEN TERHADAP KEPUTUSAN ...   
+7       Dharma Abidin Syah  PENGARUH TIPE KEPEMIMPINAN TERHADAP PRESTASI K...   
+8            Toni Budianto  PENGARUH DIMENSI KUALITAS PELAYANAN TERHADAP K...   
+9     Iwan Kurniawan Gomes  ANALISIS TINGKAT RISIKO KREDIT \r\nPADA PD. BP...   
+
+                   pembimbing_pertama                        pembimbing_kedua  \
+0  Dra. Hj. S. Anugrahini Irawati, MM         Helmi Buyung Aulia,S,ST.SE,M.MT   
+1                     Nurita Andriani                    Yustina Chrismardani   
+2      Dr. Dra. Hj. Iriani Ismail, MM      Dra. Hj. S. Anugrahini Irawati, MM   
+3         Dr. Ir. Nurita Andriani, MM               Nirma Kurriwati, SP, M.Si   
+4   Dra. Hj. S Anugrahini Irawati, MM          Helmi Buyung Aulia,S,ST,SE,.MT   
+5      Dr.RM Moch Wispandono,.S.E,.MS  Dr. Muhammad Alkirom Wildan,S.E.,M.Si.   
+6          Dr. Ir Nurita Andriani, MM             Nirma Kurriwati, S.P., M.Si   
+7      Drs. Ec. Mudji Kuswinarno M,Si                           Faidal SE, MM   
+8   Bambang Setiyo Pambudi, S.E., MM.                    Fathor AS, S.E., MM.   
+9     Drs. Ec. Makhmud Zulkifli, M.Si                 Echsan Gani, S.E., M.SI   
+
+                                   abstrak_indonesia  \
+0  ABSTRAK\r\nSatiyah, Pengaruh Faktor-faktor Pel...   
+1  Tujuan penelitian ini adalah untuk mengetahui ...   
+2                                                NaN   
+3  Aplikasi nyata pemanfaatan teknologi informasi...   
+4  Abstrak\r\nPenelitian ini menggunakan metode k...   
+5  Abstrak\r\n\r\nAththaariq, Pengaruh Kompetensi...   
+6  ABSTRAK\r\nHaryono Arifin, Pengaruh Perilaku K...   
+7  ABSTRAK\r\n\tDharma Abidin Syah,Kesimpulan: (1...   
+8  ABSTRAK\r\n\r\nTujuan penelitian ini adalah un...   
+9  Hasil dari penelitian ini dari perhitungan Cre...   
+
+                                     abstrak_inggris      prodi  \
+0  ABSTRACT\r\n\r\nIn an effort to increase labor...  Manajemen   
+1  This study wanted to know the brand associatio...  Manajemen   
+2                                                NaN  Manajemen   
+3  Academic portal system in University of Trunoj...  Manajemen   
+4  Abstract\r\nThis research use quantitative met...  Manajemen   
+5  Abstract\r\n\r\nThis study is aimed to analyze...  Manajemen   
+6  ABSTRACT\r\n\r\nHaryono Arifin, Influence Cons...  Manajemen   
+7  ABSTRACT\r\n\r\nDharma Abidin Syah,Conclusions...  Manajemen   
+8  ABSTRACT\r\n\r\nThe purpose of this study was ...  Manajemen   
+9  Results from this study of Credit Risk Ratio c...  Manajemen   
+
+                             abstrak_indonesia_clean  \
+0  abstrak satiyah pengaruh faktorfaktor pelatiha...   
+1  tujuan penelitian ini adalah untuk mengetahui ...   
+2                                                NaN   
+3  aplikasi nyata pemanfaatan teknologi informasi...   
+4  abstrak penelitian ini menggunakan metode kuan...   
+5  abstrak aththaariq pengaruh kompetensi dosen t...   
+6  abstrak haryono arifin pengaruh perilaku konsu...   
+7  abstrak dharma abidin syahkesimpulan terdapat ...   
+8  abstrak tujuan penelitian ini adalah untuk men...   
+9  hasil dari penelitian ini dari perhitungan cre...   
+
+                            abstrak_indonesia_tokens  \
+0  [&#39;abstrak&#39;, &#39;satiyah&#39;, &#39;pengaruh&#39;, &#39;faktorfakt...   
+1  [&#39;tujuan&#39;, &#39;penelitian&#39;, &#39;ini&#39;, &#39;adalah&#39;, &#39;unt...   
+2                                                 []   
+3  [&#39;aplikasi&#39;, &#39;nyata&#39;, &#39;pemanfaatan&#39;, &#39;teknolog...   
+4  [&#39;abstrak&#39;, &#39;penelitian&#39;, &#39;ini&#39;, &#39;menggunakan&#39;...   
+5  [&#39;abstrak&#39;, &#39;aththaariq&#39;, &#39;pengaruh&#39;, &#39;kompete...   
+6  [&#39;abstrak&#39;, &#39;haryono&#39;, &#39;arifin&#39;, &#39;pengaruh&#39;, &#39;...   
+7  [&#39;abstrak&#39;, &#39;dharma&#39;, &#39;abidin&#39;, &#39;syahkesimpula...   
+8  [&#39;abstrak&#39;, &#39;tujuan&#39;, &#39;penelitian&#39;, &#39;ini&#39;, &#39;ad...   
+9  [&#39;hasil&#39;, &#39;dari&#39;, &#39;penelitian&#39;, &#39;ini&#39;, &#39;dari&#39;,...   
+
+                         abstrak_indonesia_stopwords  \
+0  [&#39;abstrak&#39;, &#39;satiyah&#39;, &#39;pengaruh&#39;, &#39;faktorfakt...   
+1  [&#39;tujuan&#39;, &#39;penelitian&#39;, &#39;mengetahui&#39;, &#39;persep...   
+2                                                 []   
+3  [&#39;aplikasi&#39;, &#39;nyata&#39;, &#39;pemanfaatan&#39;, &#39;teknolog...   
+4  [&#39;abstrak&#39;, &#39;penelitian&#39;, &#39;menggunakan&#39;, &#39;meto...   
+5  [&#39;abstrak&#39;, &#39;aththaariq&#39;, &#39;pengaruh&#39;, &#39;kompete...   
+6  [&#39;abstrak&#39;, &#39;haryono&#39;, &#39;arifin&#39;, &#39;pengaruh&#39;, &#39;...   
+7  [&#39;abstrak&#39;, &#39;dharma&#39;, &#39;abidin&#39;, &#39;syahkesimpula...   
+8  [&#39;abstrak&#39;, &#39;tujuan&#39;, &#39;penelitian&#39;, &#39;mengident...   
+9  [&#39;hasil&#39;, &#39;penelitian&#39;, &#39;perhitungan&#39;, &#39;credit...   
+
+                           abstrak_indonesia_stemmed  \
+0  [&#39;abstrak&#39;, &#39;satiyah&#39;, &#39;pengaruh&#39;, &#39;faktorfakt...   
+1  [&#39;tuju&#39;, &#39;teliti&#39;, &#39;tahu&#39;, &#39;persepsi&#39;, &#39;brand&#39;...   
+2                                                 []   
+3  [&#39;aplikasi&#39;, &#39;nyata&#39;, &#39;manfaat&#39;, &#39;teknologi&#39;, ...   
+4  [&#39;abstrak&#39;, &#39;teliti&#39;, &#39;guna&#39;, &#39;metode&#39;, &#39;kuant...   
+5  [&#39;abstrak&#39;, &#39;aththaariq&#39;, &#39;pengaruh&#39;, &#39;kompete...   
+6  [&#39;abstrak&#39;, &#39;haryono&#39;, &#39;arifin&#39;, &#39;pengaruh&#39;, &#39;...   
+7  [&#39;abstrak&#39;, &#39;dharma&#39;, &#39;abidin&#39;, &#39;syahkesimpula...   
+8  [&#39;abstrak&#39;, &#39;tuju&#39;, &#39;teliti&#39;, &#39;identifikasi&#39;, ...   
+9  [&#39;hasil&#39;, &#39;teliti&#39;, &#39;hitung&#39;, &#39;credit&#39;, &#39;risk&#39;...   
+
+                         abstrak_indonesia_corrected  \
+0  [&#39;abstract&#39;, &#39;aaliyah&#39;, &#39;pengaruh&#39;, &#39;faktorfak...   
+1  [&#39;juju&#39;, &#39;elite&#39;, &#39;tau&#39;, &#39;perseus&#39;, &#39;brand&#39;, &#39;...   
+2                                                 []   
+3  [&#39;aplikasi&#39;, &#39;nyala&#39;, &#39;manat&#39;, &#39;teknologi&#39;, &#39;i...   
+4  [&#39;abstract&#39;, &#39;elite&#39;, &#39;gun&#39;, &#39;metope&#39;, &#39;kuanti...   
+5  [&#39;abstract&#39;, &#39;aththaariq&#39;, &#39;pengaruh&#39;, &#39;kompet...   
+6  [&#39;abstract&#39;, &#39;harmony&#39;, &#39;origin&#39;, &#39;pengaruh&#39;, ...   
+7  [&#39;abstract&#39;, &#39;dharma&#39;, &#39;abiding&#39;, &#39;syahkesimpu...   
+8  [&#39;abstract&#39;, &#39;juju&#39;, &#39;elite&#39;, &#39;identifikasi&#39;, ...   
+9  [&#39;hail&#39;, &#39;elite&#39;, &#39;hiding&#39;, &#39;credit&#39;, &#39;risk&#39;, ...   
+
+                            frekuensi_kata_indonesia  
+0  {&#39;abstrak&#39;: 1, &#39;satiyah&#39;: 1, &#39;pengaruh&#39;: 5, &#39;f...  
+1  {&#39;tuju&#39;: 1, &#39;teliti&#39;: 5, &#39;tahu&#39;: 1, &#39;persepsi&#39;...  
+2                                                 {}  
+3  {&#39;aplikasi&#39;: 1, &#39;nyata&#39;: 1, &#39;manfaat&#39;: 1, &#39;tek...  
+4  {&#39;abstrak&#39;: 1, &#39;teliti&#39;: 4, &#39;guna&#39;: 3, &#39;metode...  
+5  {&#39;abstrak&#39;: 1, &#39;aththaariq&#39;: 1, &#39;pengaruh&#39;: 6,...  
+6  {&#39;abstrak&#39;: 1, &#39;haryono&#39;: 1, &#39;arifin&#39;: 1, &#39;pen...  
+7  {&#39;abstrak&#39;: 1, &#39;dharma&#39;: 1, &#39;abidin&#39;: 1, &#39;syah...  
+8  {&#39;abstrak&#39;: 1, &#39;tuju&#39;: 1, &#39;teliti&#39;: 2, &#39;identi...  
+9  {&#39;hasil&#39;: 1, &#39;teliti&#39;: 2, &#39;hitung&#39;: 1, &#39;credit...  
+
+Jumlah data: 1031
 </pre></div>
 </div>
 </div>
@@ -908,9 +1200,7 @@ Scraping data for program: Manajemen
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html">
-  <div id="df-214bb1ed-6d27-422e-8fcc-70bb9a4f324f" class="colab-df-container">
-    <div>
+<div class="output text_html"><div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
@@ -1003,908 +1293,7 @@ Scraping data for program: Manajemen
   </tbody>
 </table>
 <p>2473 rows × 3 columns</p>
-</div>
-    <div class="colab-df-buttons">
-
-  <div class="colab-df-container">
-    <button class="colab-df-convert" onclick="convertToInteractive('df-214bb1ed-6d27-422e-8fcc-70bb9a4f324f')"
-            title="Convert this dataframe to an interactive table."
-            style="display:none;">
-
-  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960">
-    <path d="M120-120v-720h720v720H120Zm60-500h600v-160H180v160Zm220 220h160v-160H400v160Zm0 220h160v-160H400v160ZM180-400h160v-160H180v160Zm440 0h160v-160H620v160ZM180-180h160v-160H180v160Zm440 0h160v-160H620v160Z"/>
-  </svg>
-    </button>
-
-  <style>
-    .colab-df-container {
-      display:flex;
-      gap: 12px;
-    }
-
-    .colab-df-convert {
-      background-color: #E8F0FE;
-      border: none;
-      border-radius: 50%;
-      cursor: pointer;
-      display: none;
-      fill: #1967D2;
-      height: 32px;
-      padding: 0 0 0 0;
-      width: 32px;
-    }
-
-    .colab-df-convert:hover {
-      background-color: #E2EBFA;
-      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);
-      fill: #174EA6;
-    }
-
-    .colab-df-buttons div {
-      margin-bottom: 4px;
-    }
-
-    [theme=dark] .colab-df-convert {
-      background-color: #3B4455;
-      fill: #D2E3FC;
-    }
-
-    [theme=dark] .colab-df-convert:hover {
-      background-color: #434B5C;
-      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
-      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));
-      fill: #FFFFFF;
-    }
-  </style>
-
-    <script>
-      const buttonEl =
-        document.querySelector('#df-214bb1ed-6d27-422e-8fcc-70bb9a4f324f button.colab-df-convert');
-      buttonEl.style.display =
-        google.colab.kernel.accessAllowed ? 'block' : 'none';
-
-      async function convertToInteractive(key) {
-        const element = document.querySelector('#df-214bb1ed-6d27-422e-8fcc-70bb9a4f324f');
-        const dataTable =
-          await google.colab.kernel.invokeFunction('convertToInteractive',
-                                                    [key], {});
-        if (!dataTable) return;
-
-        const docLinkHtml = 'Like what you see? Visit the ' +
-          '<a target="_blank" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'
-          + ' to learn more about interactive tables.';
-        element.innerHTML = '';
-        dataTable['output_type'] = 'display_data';
-        await google.colab.output.renderOutput(dataTable, element);
-        const docLink = document.createElement('div');
-        docLink.innerHTML = docLinkHtml;
-        element.appendChild(docLink);
-      }
-    </script>
-  </div>
-
-
-    <div id="df-06071e7f-0c72-4b31-9925-2d9f4788ffbe">
-      <button class="colab-df-quickchart" onclick="quickchart('df-06071e7f-0c72-4b31-9925-2d9f4788ffbe')"
-                title="Suggest charts"
-                style="display:none;">
-
-<svg xmlns="http://www.w3.org/2000/svg" height="24px"viewBox="0 0 24 24"
-     width="24px">
-    <g>
-        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
-    </g>
-</svg>
-      </button>
-
-<style>
-  .colab-df-quickchart {
-      --bg-color: #E8F0FE;
-      --fill-color: #1967D2;
-      --hover-bg-color: #E2EBFA;
-      --hover-fill-color: #174EA6;
-      --disabled-fill-color: #AAA;
-      --disabled-bg-color: #DDD;
-  }
-
-  [theme=dark] .colab-df-quickchart {
-      --bg-color: #3B4455;
-      --fill-color: #D2E3FC;
-      --hover-bg-color: #434B5C;
-      --hover-fill-color: #FFFFFF;
-      --disabled-bg-color: #3B4455;
-      --disabled-fill-color: #666;
-  }
-
-  .colab-df-quickchart {
-    background-color: var(--bg-color);
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    display: none;
-    fill: var(--fill-color);
-    height: 32px;
-    padding: 0;
-    width: 32px;
-  }
-
-  .colab-df-quickchart:hover {
-    background-color: var(--hover-bg-color);
-    box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
-    fill: var(--button-hover-fill-color);
-  }
-
-  .colab-df-quickchart-complete:disabled,
-  .colab-df-quickchart-complete:disabled:hover {
-    background-color: var(--disabled-bg-color);
-    fill: var(--disabled-fill-color);
-    box-shadow: none;
-  }
-
-  .colab-df-spinner {
-    border: 2px solid var(--fill-color);
-    border-color: transparent;
-    border-bottom-color: var(--fill-color);
-    animation:
-      spin 1s steps(1) infinite;
-  }
-
-  @keyframes spin {
-    0% {
-      border-color: transparent;
-      border-bottom-color: var(--fill-color);
-      border-left-color: var(--fill-color);
-    }
-    20% {
-      border-color: transparent;
-      border-left-color: var(--fill-color);
-      border-top-color: var(--fill-color);
-    }
-    30% {
-      border-color: transparent;
-      border-left-color: var(--fill-color);
-      border-top-color: var(--fill-color);
-      border-right-color: var(--fill-color);
-    }
-    40% {
-      border-color: transparent;
-      border-right-color: var(--fill-color);
-      border-top-color: var(--fill-color);
-    }
-    60% {
-      border-color: transparent;
-      border-right-color: var(--fill-color);
-    }
-    80% {
-      border-color: transparent;
-      border-right-color: var(--fill-color);
-      border-bottom-color: var(--fill-color);
-    }
-    90% {
-      border-color: transparent;
-      border-bottom-color: var(--fill-color);
-    }
-  }
-</style>
-
-      <script>
-        async function quickchart(key) {
-          const quickchartButtonEl =
-            document.querySelector('#' + key + ' button');
-          quickchartButtonEl.disabled = true;  // To prevent multiple clicks.
-          quickchartButtonEl.classList.add('colab-df-spinner');
-          try {
-            const charts = await google.colab.kernel.invokeFunction(
-                'suggestCharts', [key], {});
-          } catch (error) {
-            console.error('Error during call to suggestCharts:', error);
-          }
-          quickchartButtonEl.classList.remove('colab-df-spinner');
-          quickchartButtonEl.classList.add('colab-df-quickchart-complete');
-        }
-        (() => {
-          let quickchartButtonEl =
-            document.querySelector('#df-06071e7f-0c72-4b31-9925-2d9f4788ffbe button');
-          quickchartButtonEl.style.display =
-            google.colab.kernel.accessAllowed ? 'block' : 'none';
-        })();
-      </script>
-    </div>
-
-  <div id="id_34188dcc-1cdf-4915-afe0-5217cfe93421">
-    <style>
-      .colab-df-generate {
-        background-color: #E8F0FE;
-        border: none;
-        border-radius: 50%;
-        cursor: pointer;
-        display: none;
-        fill: #1967D2;
-        height: 32px;
-        padding: 0 0 0 0;
-        width: 32px;
-      }
-
-      .colab-df-generate:hover {
-        background-color: #E2EBFA;
-        box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);
-        fill: #174EA6;
-      }
-
-      [theme=dark] .colab-df-generate {
-        background-color: #3B4455;
-        fill: #D2E3FC;
-      }
-
-      [theme=dark] .colab-df-generate:hover {
-        background-color: #434B5C;
-        box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
-        filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));
-        fill: #FFFFFF;
-      }
-    </style>
-    <button class="colab-df-generate" onclick="generateWithVariable('df_links')"
-            title="Generate code using this dataframe."
-            style="display:none;">
-
-  <svg xmlns="http://www.w3.org/2000/svg" height="24px"viewBox="0 0 24 24"
-       width="24px">
-    <path d="M7,19H8.4L18.45,9,17,7.55,7,17.6ZM5,21V16.75L18.45,3.32a2,2,0,0,1,2.83,0l1.4,1.43a1.91,1.91,0,0,1,.58,1.4,1.91,1.91,0,0,1-.58,1.4L9.25,21ZM18.45,9,17,7.55Zm-12,3A5.31,5.31,0,0,0,4.9,8.1,5.31,5.31,0,0,0,1,6.5,5.31,5.31,0,0,0,4.9,4.9,5.31,5.31,0,0,0,6.5,1,5.31,5.31,0,0,0,8.1,4.9,5.31,5.31,0,0,0,12,6.5,5.46,5.46,0,0,0,6.5,12Z"/>
-  </svg>
-    </button>
-    <script>
-      (() => {
-      const buttonEl =
-        document.querySelector('#id_34188dcc-1cdf-4915-afe0-5217cfe93421 button.colab-df-generate');
-      buttonEl.style.display =
-        google.colab.kernel.accessAllowed ? 'block' : 'none';
-
-      buttonEl.onclick = () => {
-        google.colab.notebook.generateWithVariable('df_links');
-      }
-      })();
-    </script>
-  </div>
-
-    </div>
-  </div>
-</div><div class="output text_html"><h4 class="colab-quickchart-section-title">Distributions</h4>
-<style>
-  .colab-quickchart-section-title {
-      clear: both;
-  }
-</style></div><div class="output text_html">      <div class="colab-quickchart-chart-with-code" id="chart-ce9df08a-dc3f-490b-b8b0-00132511ebca">
-        <img style="width: 180px;" src="data:image/png;base64,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
-7drV69bd3T3QIwMAA6Sx3gO83ZYtWzJ+/Pg0Nr45WkNDQ5qbm9PR0ZETTjih132XLl2ar3zlK722
-nXjiibnmmmsO+Vzd3d0Zv359Zs6cmaFDhx7y4/P/uru7s95aDwhrPXCs9cCx1v3rmmse6vX1oVrv
-iRMn5otf/OK73q+hqqrqoL9LP/jhD3+YSy65JJs2berZNnPmzPzVX/1VPvnJT/a6b1dXV7q6unpt
-a2pqSlNT0yGfa9euXRk5cmR27tyZESNGHPLj8/+s9cCx1gPHWg8caz2wBnq9B90rLscee2y2bduW
-PXv2pLGxMVVVpaOjI83Nze+4b39FCgAwOA26c1yOOuqoTJ8+PatWrUqS3H333ZkwYcI73iYCAD54
-Bt0rLkmyYsWKzJ8/P0uWLMmIESOycuXKeo8EAAwCgzJcJk+enEcffbTeY/TS1NSUL3/5y96aGgDW
-euBY64FjrQeOtR5YA73eg+7kXACAfRl057gAAOyLcAEAiiFcAIBiCBcAoBjC5QC4WvWh1dLSksmT
-J2fatGmZNm1a7rrrriT7X2fPwYG5+uqr09LSkoaGhjzxxBM92w92ba37vu1rrff1+51Y64P1+uuv
-Z+7cuZk0aVKmTp2as846q+f6dZ2dnTn77LPT2tqaKVOmZN26dT2PO9h9H2T7W+tPfOIT+chHPtLz
-u/03f/M3PY8b0LWueFdnnnlmtXLlyqqqquof//Efq9NOO62+AxVu4sSJ1Y9+9KN3bN/fOnsODswj
-jzxSbdmy5R1rfLBra933bV9rva/f76qy1gfrtddeq+69995q7969VVVV1de//vVq9uzZVVVV1ec/
-//nqy1/+clVVVbV+/frqmGOOqd544433tO+DbH9rPXv27Orb3/52n48byLUWLu/i5Zdfro444ohq
-9+7dVVVV1d69e6uxY8dWmzdvrvNk5errP/b9rbPnoHZvXeODXVvrfmAONFys9aGzYcOGauLEiVVV
-VdXhhx9ebdu2rWffjBkzqgcffPA97eP/vXWt9xcuA7nW3ip6F/u7WjUH7/d///dz0kkn5Qtf+EJ+
-9rOf7XedPQfvzcGurXU/eG///U4O/nngnZYtW5Y5c+Zkx44d2b17d8aNG9ezr6WlJR0dHQe9j95+
-tda/smjRopx00kn53Oc+lxdeeCFJBnythQsDbt26dXnqqafy+OOPZ8yYMbnsssvqPRIcMn6/+9eS
-JUvS1taWpUuX1nuU9723r/Udd9yRZ599Nk899VQ+/vGP53d+53fqMpdweRdvvVp1kv1erZoD86u1
-GzZsWL70pS/le9/73n7X2XPw3hzs2lr3g9PX73dy8M8D/++mm27KmjVrct999+Wwww7L6NGj09jY
-mO3bt/fcp729Pc3NzQe9jze9fa2TN3+HkzdfEbzqqqvywgsvZMeOHQO+1sLlXbha9aH1y1/+Mq+8
-8krP13feeWdOOeWU/a6z5+C9Odi1te6129fvd3LwzwNvuvnmm3PnnXfmwQcfzKhRo3q2X3TRRVm+
-fHmSZMOGDdm6dWtmz579nvZ90PW11nv27MnLL7/cc5+77747Y8eOzejRo5MM8Fof9NkxHyDPPvts
-NWvWrKq1tbU69dRTq6eeeqreIxXr+eefr6ZNm1addNJJ1ZQpU6rzzjuvevHFF6uq2v86ew4OzIIF
-C6pjjjmmGjp0aHXUUUdVxx9/fFVVB7+21n3f+lrr/f1+V5W1PlhbtmypklTHHXdcNXXq1Grq1KnV
-zJkzq6qqqu3bt1dnnXVWdcIJJ1Qf/ehHq3/7t3/redzB7vsg29da/+IXv6hOPfXUasqUKdXJJ59c
-ffKTn6yeeOKJnscN5Fq7yCIAUAxvFQEAxRAuAEAxhAsAUAzhAgAUQ7gAAMUQLgBAMYQLAFAM4QIA
-FEO4AADFEC4AQDH+D15TC9sZ8Tu2AAAAAElFTkSuQmCC
-">
-      </div>
-      <script type="text/javascript">
-        (() => {
-          const chartElement = document.getElementById("chart-ce9df08a-dc3f-490b-b8b0-00132511ebca");
-          async function getCodeForChartHandler(event) {
-            const chartCodeResponse =  await google.colab.kernel.invokeFunction(
-                'getCodeForChart', ["chart-ce9df08a-dc3f-490b-b8b0-00132511ebca"], {});
-            const responseJson = chartCodeResponse.data['application/json'];
-            await google.colab.notebook.addCell(responseJson.code, 'code');
-          }
-          chartElement.onclick = getCodeForChartHandler;
-        })();
-      </script>
-      <style>
-        .colab-quickchart-chart-with-code  {
-            display: block;
-            float: left;
-            border: 1px solid transparent;
-        }
-
-        .colab-quickchart-chart-with-code:hover {
-            cursor: pointer;
-            border: 1px solid #aaa;
-        }
-      </style></div><div class="output text_html"><h4 class="colab-quickchart-section-title">Time series</h4>
-<style>
-  .colab-quickchart-section-title {
-      clear: both;
-  }
-</style></div><div class="output text_html">      <div class="colab-quickchart-chart-with-code" id="chart-a73dfc50-ec96-4720-8e5b-dd8ca310760c">
-        <img style="width: 180px;" src="data:image/png;base64,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
-QmCC
-">
-      </div>
-      <script type="text/javascript">
-        (() => {
-          const chartElement = document.getElementById("chart-a73dfc50-ec96-4720-8e5b-dd8ca310760c");
-          async function getCodeForChartHandler(event) {
-            const chartCodeResponse =  await google.colab.kernel.invokeFunction(
-                'getCodeForChart', ["chart-a73dfc50-ec96-4720-8e5b-dd8ca310760c"], {});
-            const responseJson = chartCodeResponse.data['application/json'];
-            await google.colab.notebook.addCell(responseJson.code, 'code');
-          }
-          chartElement.onclick = getCodeForChartHandler;
-        })();
-      </script>
-      <style>
-        .colab-quickchart-chart-with-code  {
-            display: block;
-            float: left;
-            border: 1px solid transparent;
-        }
-
-        .colab-quickchart-chart-with-code:hover {
-            cursor: pointer;
-            border: 1px solid #aaa;
-        }
-      </style></div><div class="output text_html"><h4 class="colab-quickchart-section-title">Values</h4>
-<style>
-  .colab-quickchart-section-title {
-      clear: both;
-  }
-</style></div><div class="output text_html">      <div class="colab-quickchart-chart-with-code" id="chart-2f431633-f527-4c67-9abb-4ca54088d566">
-        <img style="width: 180px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAqUAAAFuCAYAAAC4H2HYAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90
-bGliIHZlcnNpb24zLjEwLjAsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvlHJYcgAAAAlwSFlzAAAP
-YQAAD2EBqD+naQAANu1JREFUeJzt3Xl0lPXd//9XdghkgYRAIHtmggtLWA07IbFftXpLXe/bVokV
-wQUJPzzfu3qf4+ntfZ8j7bn9UgMoaGuxguV2gdqq1WoCCYsUgogICsxkIQkkBBIIJJBtcv3+mDBA
-BUpCkmtm8nycM39wfTIz7+t8GPI812SIj2EYhgAAAAAT+Zo9AAAAAECUAgAAwHREKQAAAExHlAIA
-AMB0RCkAAABMR5QCAADAdEQpAAAATEeUAgAAwHREKQAAAExHlAIAAMB0RCkA9LCZM2fKx8dHH330
-0SXHf/aznykrK8ucoQDAZEQpAJggMjJSzz77rJqbm80eBQDcAlEKACbIyspSW1ubli1bdtn1U6dO
-ad68eYqJiVFkZKRuv/12HTx4sIenBICeQ5QCgAmCgoL08ssv67//+79VXV39g/WHH35YNptNu3bt
-UllZmYYPH67MzEzV19ebMC0AdD+iFABMMnv2bI0fP17/8R//ccnxyspKffzxx3rllVc0ZMgQBQcH
-63/+53907tw5ffzxxyZNCwDdiygFABPl5ORozZo1+vrrr13HysvLJUnJycmuYwEBAYqPj1dZWVmP
-zwgAPYEoBQATjRgxQnPnzlV2drbrWGxsrCSpqKjIday1tVVlZWWKi4vr8RkBoCcQpQBgsv/6r//S
-vn379Le//U2SFB0drTvuuEPPPvusjh07pnPnzukXv/iFAgMD9eMf/9jkaQGgexClAGCyiIgI/ed/
-/qdOnDjhOrZmzRolJCRo7NixiomJ0f79+5Wbm6uQkBATJwWA7uNjGIZh9hAAAADo3bhSCgAAANMR
-pQAAADAdUQoAAADTEaUAAAAwHVEKAAAA0xGlAAAAMB1RCgAAANN5fJTm5OSYPQIAAACuk8dH6eHD
-h80eAQAAANfJ46MUAAAAno8oBQAAgOmIUgAAAJiOKAUAAIDpiFIAAACYrkNR2tjYqNmzZyslJUWj
-R4/WrbfeKrvdLkmaOXOmEhMTlZqaqtTUVP3mN79x3a+6ulq33XabrFarRowYoc2bN1/TGgAAAHoH
-/47eYd68ebr99tvl4+OjFStWaO7cucrPz5ck/eY3v9Hs2bN/cJ/nnntOaWlp+uyzz1RYWKif/OQn
-KikpUUBAwFXXAAAA0Dt06Eppnz59dMcdd8jHx0eSlJaWptLS0n96v/fee09PPPGEJGnChAkaOnSo
-CgoK/ukaAAAAeofr+pnSnJwc3X333a4/P/fccxo5cqQefPBBFRcXS5JqamrU0tKiIUOGuL4uISFB
-ZWVlV127nKamJp0+ffqSm8PhuJ5TAAAAgBvodJS+9NJLstvtWrJkiSRpzZo1OnDggPbu3atp06bp
-zjvv7LIhz1uyZInCwsIuue3cubPLnwcAAAA9q1NR+vLLL2vDhg369NNPFRwcLEmKjY2VJPn4+GjB
-ggUqLi5WTU2NIiIi5O/vr6qqKtf9S0tLFRcXd9W1y3n++edVV1d3yW3ixImdOQUAAIBeyTAMtTra
-zB7jBzocpUuXLtW6dev0xRdfKDw8XJLU2tqqY8eOub5m/fr1Gjx4sCIiIiRJ999/v1atWiVJKiws
-1JEjRzRjxox/uvaPgoKCFBoaesnNz8+vo6cAAADQ6xiGoc/3V+muFVv11pelZo/zAx369H1FRYWe
-ffZZJSUlKT09XZIzFDdu3Kgf//jHampqkq+vryIjI/WXv/zFdb9f//rXevjhh2W1WhUYGKi1a9e6
-Pl1/tTUAAABcn7Y2Q59/d0zL8mz6rvK0JKm+sVU/n5IoX18fk6e7wMcwDMPsIa7H4sWLtXTpUrPH
-AAAAcCvOGK3SK7k2Hag6I0nqF+inrCkJemxqkgb2CzR5wkt1+P8pBQAAgPtqazP02f4qLcu7EKP9
-g/yVNTlBj01N1AA3i9HziFIAAAAv0NZm6K/7KrU8z66Dx5wxGhLkr0enJOjnUxMVHuyeMXoeUQoA
-AODBHG2G/vptpZbl2WSrrpckhfTx18+nJOrnUxIVFuwZn9UhSgEAADyQo83Qx3uPavlGu+ztMRra
-x18/n5qoR6ckKqyvZ8ToeUQpAACAB3G0Gfrom6NavtGmouMNkpwxOndakrKmJCi0j2fF6HlEKQAA
-gAdodbTpo71HtTzPruITzhgN6xuguVMTNceDY/Q8ohQAAMCNtTra9Oc9R7Vik10l7TEaHhygx6cl
-6ZFJ8Qrx8Bg9jygFAABwQ62ONv3p6yN6dZNdpTVnJUkDggP0+PQkPTIpQf2DvCvjvOtsAAAAPFxL
-e4yu2GhXWa0zRgf2C3RdGe3nZTF6nneeFQAAgIdpcbRpw+4KrdhkV3ntOUlSRL9AzZuepJ+leW+M
-nufdZwcAAODmmlsvxGjFSWeMRvYP1PzpyfppWpyCA3tHrvWOswQAAHAzza1t+uCrCr26ya4jp87H
-aJCemJGkn94Sr76BfiZP2LOIUgAAgB7U1OrQ+7sqtDK/yBWjg0KC9MSMZD00Ma7Xxeh5RCkAAEAP
-aGp16L1dFVq5ya6jdY2SpKiQID05M1n/NjFOfQJ6Z4yeR5QCAAB0o8YWh97bVa6V+UWqbI/RwaFB
-enJGsv6VGHUhSgEAALpBY4tD/7uzTCsLinTsdJMkaUhoHz2VnqwHxscSo/+AKAUAAOhCjS0OrdtZ
-plUXxWh0WB89lW7RA+NjFORPjF4OUQoAANAFGlscemeHM0aPn3HG6ND2GL2fGP2niFIAAIDrcK7Z
-oXd2HNaqgmKdqHfG6LDwvno63aL7xsUo0N/X5Ak9A1EKAADQCWebW/XO38v0+uYinahvliTFDOir
-BekW3TOWGO0oohQAAKADzja3as32w3pjc7FqGpwxGjvwQowG+BGjnUGUAgAAXIOGpla9vf2wfrul
-WLXtMRofEayn0y36yZhhxOh1IkoBAACuor6pVW9vL9VvNxfr5NkWSc4YfWaWVbNTh8qfGO0SRCkA
-AMBlnGlscV0ZPdUeo4mR/bQg3aK7idEuR5QCAABc5Exji97aVqrfbS1R3TlnjCZF9tMzGRbdNYoY
-7S5EKQAAgKTT7TH65sUxOqifsjOsunPUUPn5+pg8oXcjSgEAQK9Wd65Fq7eV6PdbS3S6sVWSZInq
-r2dmWYjRHkSUAgCAXqnubIve3Fai1dtKdKY9Rq1R/bUww6o7RkYToz2MKAUAAL3KqbPN+v3WEq3e
-VqozTc4YTRncX9kZKbp9xBD5EqOmIEoBAECvcLKhWW9uLdFbX5aqvj1GbxgSooUZVt12MzFqNqIU
-AAB4tdqGZv1uS7H+8GWpGpodkqQbo0OVnWHRj24iRt0FUQoAALxSbUOzfrulWG9fFKM3RYcqO9Oq
-W28cTIy6GaIUAAB4lZr6Jr2xpVhrth/W2fYYvXloqLIzrLr1psHy8SFG3RFRCgAAvMKJ+ia9sdkZ
-o+danDE6cliYsjOsyrgxihh1c0QpAADwaMfPNOmNzUVa+/cyV4yOignTokyr0ocTo56CKAUAAB6p
-+kyjXi8o1js7DquxpU2SNDo2XIsyrJo5fBAx6mGIUgAA4FGqTzdqZUGR/rijTE2tzhgdExeu7Ayr
-ZqQQo56KKAUAAB7h2OlGrcwv0rqdF2J0bFy4FmWmaJo1khj1cEQpAABwa1V1jVqZb9e6wnI1t8fo
-+PgBys60aqqFGPUWRCkAAHBLR0+d08r8Ir1bWK5mhzNGJyYMVHamVZOTI4hRL0OUAgAAt3L01Dm9
-lm/Xe4UVF2I0caAWZVo1KYkY9VZEKQAAcAsVJ8/qtfwivb+rXC0OQ5KUljRQ2RkpmpQcYfJ06G5E
-KQAAMFV5rTNGP/jqQoxOSopQdqZVaUnEaG9BlAIAAFOU157Vq5vs+uCrCrW2OWN0iiVC2Rkpmpg4
-0OTp0NOIUgAA0KPKas5qxSabNuw+4orRadZIZWdYNT6BGO2tiFIAANAjDtc0aMVGuzZ8fUSOi2J0
-UaZV4+KJ0d6OKAUAAN2q9ESDlm+068M9F2J0RsogLcywalz8AJOng7sgSgEAQLcoPl6vFe0x2t6i
-Sh/ujNExccQoLuXbkS9ubGzU7NmzlZKSotGjR+vWW2+V3W6XJFVXV+u2226T1WrViBEjtHnzZtf9
-OrsGAAA8T9Hxev1/7+5R5tICbfjaGaSzbojSh09P0epHJxKkuKwOXymdN2+ebr/9dvn4+GjFihWa
-O3eu8vPz9dxzzyktLU2fffaZCgsL9ZOf/EQlJSUKCAjo9BoAAPAc9up6Ld9o00ffHHVdGc28MUoL
-M6waFRNu6mxwfx2K0j59+uiOO+5w/TktLU0vv/yyJOm9995zXTWdMGGChg4dqoKCAmVmZnZ6DQAA
-uD/bsTNattGuj/celdEeo7feNFjZGVaNGBZm7nDwGNf1M6U5OTm6++67VVNTo5aWFg0ZMsS1lpCQ
-oLKysk6vXU5TU5OampouOeZwOK7nFAAAQCcdOnZGy/Js+uTbSleM/uimwVpIjKITOh2lL730kux2
-u/Ly8nTu3LmunOmKlixZohdffPGSY2lpaT3y3AAAwOlglTNG/7rvQozedvMQPZNh0c1DiVF0Tqei
-9OWXX9aGDRuUm5ur4OBgBQcHy9/fX1VVVa6rnqWlpYqLi1NERESn1i7n+eef1+LFiy859sILL3Tm
-FAAAQAd9X3lay/Js+nRflevYHSOH6JlZVt0YHWriZPAGHfr0vSQtXbpU69at0xdffKHw8HDX8fvv
-v1+rVq2SJBUWFurIkSOaMWPGda39o6CgIIWGhl5y8/Pz6+gpAACADvju6Gk9seYr3Z6zRZ/uq5KP
-j/TjkdH6bNE0vfbTcQQpukSHrpRWVFTo2WefVVJSktLT0yU5Q3HHjh369a9/rYcfflhWq1WBgYFa
-u3at6xP0nV0DAADm2XekTsvybPr8u2OS5IrRhRlWpQwOMXk6eBsfwzj/0yCeafHixVq6dKnZYwAA
-4DX2HanTK7k25X5/IUbvGjVUz8yyyEqMopvwG50AAIAk6duKOuXkHVLu99WSJF8f6a7Rzhi1RBGj
-6F5EKQAAvdw35aeUk2fTxgMXYvTu1GFaMMui5EH9TZ4OvQVRCgBAL/V12Unl5NmUf/C4JGeMzh4z
-TAvSLUoiRtHDiFIAAHqZ3WUnlZNrU8EhZ4z6+fpodvuV0cTIfiZPh96KKAUAoJf46nCtXsm1aYvt
-hCRnjN4zZpieTrcogRiFyYhSAAC8XGFprXJybdpqd8aov6+P7h0bo6fTLYqLCDZ5OsCJKAUAwEvt
-LKlVTt4hbbPXSHLG6H3jnDEaO5AYhXshSgEA8DJ/L65RTq5N24udMRrg56P7xsXqqZnJxCjcFlEK
-AICX2F5Uo1dyD2lHSa0kZ4w+MD5WT85MVswAYhTujSgFAMCDGYbhjNE8m3a2x2ign68emBCjJ2da
-NCy8r8kTAteGKAUAwAMZhqEv26+MFpaelOSM0X+dGKsnZiRrKDEKD0OUAgDgQQzD0Fb7CeXk2rTr
-cHuM+vvq3ybE6omZyYoOI0bhmYhSAAA8gGEY2mw7oZzcQ9pddkqSM0YfmhinJ2cma3BoH3MHBK4T
-UQoAgBszDEMFh47rlVyb9pSfkiQF+fvqoVvi9MQMYhTegygFAMANGYah/IPH9UqeTd+0x2ifAF/9
-9JZ4zZ+epChiFF6GKAUAwI0YhqGNB6qVk2fT3oo6Sc4YfTgtXvOmJ2tQSJDJEwLdgygFAMANGIah
-vO+dMfrtEWeM9g3w08OT4vX4tCRiFF6PKAUAwESGYeiL745p2Uab9h05LUkKDrwQo5H9iVH0DkQp
-AAAmaGsz9Pl3x7Qsz6bvKp0x2i/QT49MTtDj05I0sF+gyRMCPYsoBQCgBzljtEqv5Np0oOqMJGeM
-zpmcoLnEKHoxohQAgB7Q1mbos/1VWpZ3IUb7B/kra3KCHpuaqAHEKHo5ohQAgG7U1mbor/sqtTzP
-roPHnDEaEuSvR6ck6OdTExUeTIwCElEKAEC3cLQZ+uu3lVqWZ5Otul6SFNLHX49OSdRjUxIVFhxg
-8oSAeyFKAQDoQo42Qx/vParlG+2yt8doaB9//Xxqoh6dkqiwvsQocDlEKQAAXcDRZuijb45q+Uab
-io43SHLG6NxpScqakqDQPsQocDVEKQAA16HV0aaP9h7V8jy7ik84YzSsb4DmTk3UHGIUuGZEKQAA
-ndDqaNOf9xzVik12lbTHaHhwgB6flqRHJsUrhBgFOoQoBQCgA1odbfrT10f06ia7SmvOSpIGBAfo
-8elJemRSgvoH8a0V6AxeOQAAXIOW9hhdsdGuslpnjA7sF+i6MtqPGAWuC68gAACuosXRpg27K7Ri
-k13lteckSRH9AjVvepJ+lkaMAl2FVxIAAJfR3Nqm9bsr9OomuypOOmM0sn+g5k9P1k/T4hQcyLdQ
-oCvxigIA4CLNrW364CtnjB45dT5Gg/TEjCT99JZ49Q30M3lCwDsRpQAASGpqdej9XRVamV/kitFB
-IUF6YkayHpoYR4wC3YwoBQD0ak2tDr1XWK6V+UU6WtcoSYoKCdKTM5P1bxPj1CeAGAV6AlEKAOiV
-Glscem9XuV7bVKSq084YHRwapCdnJOtfiVGgxxGlAIBepbHFof/dWaaVBUU6drpJkjQktI+eSk/W
-A+NjiVHAJEQpAKBXaGxx6I87yrSqoEjVZ5wxGh3WR0+lW/TA+BgF+ROjgJmIUgCAV2tsceid9hg9
-3h6jQ9tj9H5iFHAbRCkAwCuda3bonR2HtaqgWCfqnTE6LLyvnk636L5xMQr09zV5QgAXI0oBAF7l
-bHOr1v79sN7YXKwT9c2SpJgBzhi9dywxCrgrohQA4BXONrdqzXZnjNY0OGM0dmBfLUi36J6xMQrw
-I0YBd0aUAgA8WkNTq97efli/3VKs2vYYjRsYrAWzLPrJmGHEKOAhiFIAgEeqb2rVH74s1e+2FOvk
-2RZJUnxEsBakWzSbGAU8DlEKAPAoZxpbXFdGT7XHaGJkPy1It+ju1KHyJ0YBj0SUAgA8wpnGFr21
-rVS/21qiunPOGE2K7KdnMiy6axQxCng6ohQA4NZON7Zo9dZSvbm1WKcbWyVJSYP6aeEsq+4aPVR+
-vj4mTwigKxClAAC3VHeuRau3lej3W0tcMWqJ6q9nZll05yhiFPA2RCkAwK3UnW3Rm9tKtHpbic60
-x6g1qr8WZlh1x8hoYhTwUh36AZyFCxcqISFBPj4+2rNnj+t4QkKChg8frtTUVKWmpurdd991rdls
-Nk2ePFkpKSmaMGGC9u/ff01rAIDe5dTZZi39/KCm/nqjluXZdKaxVSmD+2vFQ2P0t0XTease8HId
-ulJ633336d///d81derUH6y9++67Sk1N/cHx+fPna968ecrKytIHH3ygrKwsFRYW/tM1AEDvcLKh
-WW9uLdFbX5aqvsl5ZfSGISFamGHVbTcPkS8hCvQKHYrS6dOnd+jBq6urtWvXLn3++eeSpHvvvVcL
-FiyQ3W5XaGjoFdcsFstlH6+pqUlNTU2XHHM4HB2aCQDgHmobmvW7LcX6w5elamh2/lt+w5AQLcq0
-6kc3EaNAb9NlP1P6yCOPyDAMTZw4Ub/61a80aNAglZeXKzo6Wv7+zqfx8fFRXFycysrKFBYWdsW1
-K0XpkiVL9OKLL15yLC0tratOAQDQA2obmvXbLcV6+6IYvSk6VAszrPrRTYOJUaCX6pL/1G3z5s3a
-u3evdu/ercjISM2ZM6crHvYHnn/+edXV1V1ymzhxYrc8FwCga9XUN2nJp99r6q83amV+kRqaHbp5
-aKjeeHicPlk4VbeN4Ooo0Jt1yZXSuLg4SVJAQIAWLVqklJQUSVJsbKwqKyvV2toqf39/GYahsrIy
-xcXFKTQ09IprVxIUFKSgoKBLjvn5+XXFKQAAusmJ+ia9sblYa7Yf1rkW55XREcNCtSgjRRk3RsnH
-hxAF0AVR2tDQoJaWFoWHh0uS1q1bpzFjxkiSoqKiNHbsWK1du1ZZWVlav369YmJiXG/PX20NAODZ
-jp9p0hubi7T272WuGB0VE6bsDKtm3UCMAriUj2EYxrV+8fz58/XJJ5+oqqpKERERCgkJ0eeff657
-771XDodDhmEoKSlJOTk5SkhIkCQdPHhQWVlZqqmpUWhoqFavXq2RI0f+07VrtXjxYi1durRD9wEA
-dJ/qM416vaBY7+w4rMaWNknS6NhwLcqwaubwQcQogMvqUJS6I6IUANxD9elGrSwo0h93lKmp1Rmj
-qbHhWpRp1YwUYhTA1fEbnQAA1+XY6UatzC/Sup0XYnRsXLiyM1M03RpJjAK4JkQpAKBTquoatTLf
-rnWF5Wpuj9Hx8QOUnWnVVAsxCqBjiFIAQIccPXVOK/OL9G5huZodzhidkDBAizJTNDk5ghgF0ClE
-KQDgmhw5dU4r8+16r7DCFaMTEwdqUYZVk4hRANeJKAUAXFXFybN6Lb9I7+8qV4vD+dnYtKSBys5I
-0aTkCJOnA+AtiFIAwGWV1zpj9IOvLsTopKQIZWdalZZEjALoWkQpAOAS5bVn9eomuz74qkKtbc4Y
-nWKJUHZGiiYmDjR5OgDeiigFAEiSymrOasUmmzbsPuKK0WnWSGVnWDU+gRgF0L2IUgDo5Q7XNGjF
-Rrs2fH1EjotidFGmVePiiVEAPYMoBYBequSEM0Y/3HMhRmekDNLCDKvGxQ8weToAvQ1RCgC9TPHx
-eleMtreoZg4fpOwMq8bEEaMAzEGUAkAvUdQeo3++KEZn3RClhRlWpcaGmzobABClAODl7NVntHyj
-XR99c9QVo5k3OmN0VEy4qbMBwHlEKQB4KduxM1q20a6P9x6V4YrRwcrOsGpkTJi5wwHAPyBKAcDL
-HDp2RsvybPrk20pXjP7opsFamGHViGHEKAD3RJQCgJc4UHVay/Ps+uu+CzF6281D9EyGRTcPJUYB
-uDeiFAA83PeVp7Usz6ZP91W5jt0+YogWZlh1Y3SoiZMBwLUjSgHAQ3131Bmjn+13xqiPj3THiGg9
-k2HRDUOIUQCehSgFAA+z70idluXZ9Pl3xyQ5Y/THI6O1MMOqlMEhJk8HAJ1DlAKAh9h3pE6v5NqU
-+/2FGL1z1FAtnGWRlRgF4OGIUgBwc99W1Ckn75Byv6+WJPn6SHeNHqpnZllkiSJGAXgHohQA3NQ3
-5aeUk2fTxgMXYvTu1GFaMMui5EH9TZ4OALoWUQoAbubrspPKybMp/+BxSc4Ynd0eo0nEKAAvRZQC
-gJvYXXZSObk2FRxyxqifr48rRhMj+5k8HQB0L6IUAEz21eFavZJr0xbbCUnOGL1nzDA9nW5RAjEK
-oJcgSgHAJIWltcrJtWmr3Rmj/r4+umesM0bjI4hRAL0LUQoAPWxnSa1y8g5pm71GkjNG7xsXo6fT
-LYodGGzydABgDqIUAHrI34trlJNr0/biCzF6//hYPTUzmRgF0OsRpQDQzbYX1eiV3EPaUVIrSQrw
-uxCjMQOIUQCQiFIA6BaGYThjNM+mne0xGujnqwcmxOjJmRYNC+9r8oQA4F6IUgDoQoZh6Mv2K6OF
-pSclOWP0wQmxenJmsoYSowBwWUQpAHQBwzC01X5CObk27TrcHqP+vvq3CbF6YmayosOIUQC4GqIU
-AK6DYRjabDuhnNxD2l12SpIzRh+aGKcnZyZrcGgfcwcEAA9BlAJAJxiGoYJDx/VKrk17yk9JkoL8
-ffXQLXF6YgYxCgAdRZQCQAcYhqH8g8f1Sp5N37THaJ8AX/30lnjNn56kKGIUADqFKAWAa2AYhjYe
-qFZOnk17K+okOWP04bR4zZuerEEhQSZPCACejSgFgKswDEN53ztj9NsjzhjtG+CnhyfF6/FpScQo
-AHQRohQALsMwDH3x3TEt22jTviOnJUnBgRdiNLI/MQoAXYkoBYCLtLUZ+vy7Y1qWZ9N3lc4Y7Rfo
-p0cmJ2ju1ERFEKMA0C2IUgDQ+Rit0iu5Nh2oOiPJGaNzJido7rQkDewXaPKEAODdiFIAvVpbm6HP
-9ldpWd6FGO0f5K+syQl6bGqiBhCjANAjiFIAvVJbm6G/7qvU8jy7Dh5zxmhIkL8enZKgn09NVHgw
-MQoAPYkoBdCrONoM/fXbSi3Ls8lWXS9JCunjr0enJOqxKYkKCw4weUIA6J2IUgC9gqPN0Md7j2r5
-RrvsF8XoY1MT9eiURIX1JUYBwExEKQCv5mgz9NE3R7V8o01FxxskSaF9/PXY1CRlTUkgRgHATRCl
-ALxSq6NNH+09quV5dhWfcMZoWN8AzZ2aqDlTEhTahxgFAHdClALwKq2ONv15z1Gt2GRXSXuMhgcH
-6PFpSXpkUrxCiFEAcEu+HfnihQsXKiEhQT4+PtqzZ4/ruM1m0+TJk5WSkqIJEyZo//79170GAB3R
-6mjT+7vKlbm0QM++/41KTjRoQHCA/u//Ga6tv5ilp9MtBCkAuLEORel9992nrVu3Kj4+/pLj8+fP
-17x583To0CH94he/UFZW1nWvAcC1aHG06b1d5Zr1/wr0fz/Yq9KasxrYL1C/uO0GV4z2D+JNIQBw
-dz6GYRgdvVNCQoI+/PBDpaamqrq6WhaLRbW1tfL395dhGIqOjtbWrVsVGhraqTWLxXLNsyxevFhL
-ly7t6CkA8HAtjjZt2F2hFZvsKq89J0mK6BeoedOT9LO0ePUjRAHAo1z3v9rl5eWKjo6Wv7/zoXx8
-fBQXF6eysjKFhYV1au1KUdrU1KSmpqZLjjkcjus9BQAepLm1Tet3V+jVTXZVnHTGaGT/CzEaHEiM
-AoAn8qh/vZcsWaIXX3zxkmNpaWkmTQOgJzW3tumDr5wxeuTU+RgN0hMzkvTTW+LVN9DP5AkBANfj
-uqM0NjZWlZWVam1tdb0NX1ZWpri4OIWGhnZq7Uqef/55LV68+JJjL7zwwvWeAgA31tTq0Pu7KrQy
-v8gVo4NCgvTEjGQ9NDGOGAUAL3HdURoVFaWxY8dq7dq1ysrK0vr16xUTE+N6C76za5cTFBSkoKCg
-S475+fENCfBGTa0OvVdYrtfyi1RZ1yhJijofo7fEqU8Ar30A8CYd+qDT/Pnz9cknn6iqqkoREREK
-CQmR3W7XwYMHlZWVpZqaGoWGhmr16tUaOXKkJHV67VrxQSfAuzS2OPTernK9tqlIVaedMTo4NEhP
-zkjWv04kRgHAW3Xq0/fuhCgFvENji0P/u7NMKwuKdOy08wONQ0L76Kn0ZD0wPpYYBQAv51EfdALg
-fRpbHPrjjjKtKihS9RlnjEaH9dFTM5P1wIRYBfkTowDQGxClAEzR2OLQO+0xerw9RoeG9dFT6Rbd
-Pz6GGAWAXoYoBdCjzjU79M6Ow1pVUKwT9c4YHRbeV0+nW3TfuBgF+nfoF80BALwEUQqgR5xtbtXa
-vx/WG5uLdaK+WZIUM8AZo/eOJUYBoLcjSgF0q7PNrVqz3RmjNQ3OGI0d2FcL0i26Z2yMAvyIUQAA
-UQqgmzQ0tert7Yf12y3Fqm2P0biBwVowy6KfjBlGjAIALkGUAuhS9U2t+sOXpfrdlmKdPNsiSYqP
-CNaCdItmE6MAgCsgSgF0iTONLa4ro6faYzQxsp8WpFt0d+pQ+ROjAICrIEoBXJfTjS36w7ZS/W5r
-ierOOWM0KbKfnsmw6K5RxCgA4NoQpQA65XRji1ZvLdWbW4t1urFVkpQ0qJ8WzrLqrtFD5efrY/KE
-AABPQpQC6JC6cy1ava1Ev99a4opRS1R/PTPLojtHEaMAgM4hSgFck7qzLXpzW4lWbyvRmfYYtUb1
-18IMq+4YGU2MAgCuC1EK4KpOnW3Wm1tL9Na2Up1pcsZoyuD2GB0RLV9iFADQBYhSAJd1sqE9Rr8s
-VX17jN4wJEQLM6y67eYhxCgAoEsRpQAuUdvQrN9tKdYfvixVQ7NDkjNGF2Va9aObiFEAQPcgSgFI
-kmrqm/TbLSV6e3upzrbH6E3RoVqYYdWPbhpMjAIAuhVRCvRyNfVNemNLsdZsP+yK0ZuHhio7w6pb
-bxosHx9iFADQ/YhSoJc6Ud+kNzY7Y/RcizNGRwwL1aKMFGXcGEWMAgB6FFEK9DLVZxr1RkGx1u44
-rMaWNknSqJgwZWdYNesGYhQAYA6iFOglqs806vWCYr1zUYyOjg3XogyrZg4fRIwCAExFlAJervp0
-o1YWFOmPO8rU1OqM0dTYcC3KtGpGCjEKAHAPRCngparqGrWqoEh/3Fmm5vYYHRsXruzMFE23RhKj
-AAC3QpQCXqaqrlEr8+1aV1juitHx8QOUnWnVVAsxCgBwT0Qp4CWOnjqnlflFerewXM0OZ4xOSBig
-RZkpmpwcQYwCANwaUQp4uCOnzmllvl3vFVa4YnRi4kAtyrBqEjEKAPAQRCngoSpOntVr+UV6f1e5
-WhyGJOmWxIFalJmiSckRJk8HAEDHEKWAhymvPavX8u364KsKV4xOSopQdqZVaUnEKADAMxGlgIco
-rz2rVzc5Y7S1zRmjUywRys5I0cTEgSZPBwDA9SFKATdXVnNWKzbZtGH3EVeMTrVEKjvTqgkJxCgA
-wDsQpYCbKj3RoBWb7PrT10fkaI/RadZILcq0alw8MQoA8C5EKeBmSk40aMVGuz7ccyFGZ6QM0sIM
-q8bFDzB5OgAAugdRCriJ4uP1rhhtb1HNHD5I2RlWjYkjRgEA3o0oBUxmr67Xio02/eWbo64YnXVD
-lBZmWJUaG27qbAAA9BSiFDCJvfqMlm+06y/fHJXRHqOZNzpjdFRMuKmzAQDQ04hSoIfZjp3Rso12
-fbz34hgdrOwMq0bGhJk7HAAAJiFKgR5ysOqMlm206a/fVrpi9Ec3DdbCDKtGDCNGAQC9G1EKdLMD
-Vae1PM+uT76tdB277eYheibDopuHEqMAAEhEKdBtvq88rWV5Nn26r8p17PYRQ7Qww6obo0NNnAwA
-APdDlAJd7Lujzhj9bL8zRn18pDtGROuZDItuGEKMAgBwOUQp0EX2HanTsjybPv/umCRnjP54ZLQW
-ZliVMjjE5OkAAHBvRClwnfYdqdMruTblfn8hRu8cNVQLZ1lkJUYBALgmRCnQSd9W1Ckn75Byv6+W
-JPn6SHeNHqpnZllkiSJGAQDoCKIU6KBvyk8pJ8+mjQcuxOjdqcO0YJZFyYP6mzwdAACeiSgFrtHX
-ZSeVk2dT/sHjkpwxOrs9RpOIUQAArgtRCvwTu8tOKifXpoJDzhj18/VxxWhiZD+TpwMAwDsQpcAV
-fHW4Vq/k2rTFdkKSM0bvGTNMT6dblECMAgDQpYhS4B8UltYqJ9emrfYLMXrvWGeMxkcQowAAdAei
-FGi3s6RWOXmHtM1eI0ny9/XRfeNi9HS6RbEDg02eDgAA79alUZqQkKCgoCD17dtXkvT888/rwQcf
-lM1m05w5c3TixAmFhYXprbfe0s033yxJV10DesLfi2uUk2vT9uILMXr/+Fg9NTOZGAUAoId0+ZXS
-d999V6mpqZccmz9/vubNm6esrCx98MEHysrKUmFh4T9dA7rT9qIavZJ7SDtKaiVJAX4XYjRmADEK
-AEBP8jEMw+iqB0tISNCHH354SZRWV1fLYrGotrZW/v7+MgxD0dHR2rp1q0JDQ6+4ZrFYruk5Fy9e
-rKVLl3bVKcDLGYbhjNE8m3a2x2ign68emBCjJ2daNCy8r8kTAgDQO3X5ldJHHnlEhmFo4sSJ+tWv
-fqXy8nJFR0fL39/5VD4+PoqLi1NZWZnCwsKuuHa5KG1qalJTU9MlxxwOR1efAryQYRjaZq9RTt4h
-FZaelOSM0QcnxOrJmckaSowCAGAq3658sM2bN2vv3r3avXu3IiMjNWfOnK58eC1ZskRhYWGX3Hbu
-3NmlzwHvYhiGttiO675V2/WzN3eosPSkAv19NWdSvAr+fab+e/YIghQAADfQpW/fX6yyslIpKSkq
-KirqsrfvL3el9IUXXlBOTk53nAI8mGEY2mw7oZzcQ9pddkqSFOjvq4cmxumJGckaEtbH3AEBAMAl
-uuzt+4aGBrW0tCg8PFyStG7dOo0ZM0ZRUVEaO3as1q5dq6ysLK1fv14xMTGu6Lza2j8KCgpSUFDQ
-Jcf8/Py66hTgBQzDUP6h48rJtWlP+SlJUpC/rx66xRmjg0OJUQAA3FGXRemxY8d07733yuFwyDAM
-JSUl6e2335Ykvf7668rKytJLL72k0NBQrV692nW/q60B18owDOUfPK5X8mz6pj1G+wT46qe3xGv+
-9CRFEaMAALi1bnv7vqfw6fvezTAMbTxQrZw8m/ZW1ElyxujDafF6fHqSokKIUQAAPAG/0QkeyTAM
-5X5frWV5Nn17xBmjfQP89PCkeD0+LUmDQoL+ySMAAAB3QpTCoxiGoS++O6acPJv2Hz0tSQoOvBCj
-kf2JUQAAPBFRCo/Q1mbo8++OaVmeTd9VOmO0X6CfHpmcoLlTExVBjAIA4NGIUri1tjZDf9tfpZw8
-mw5UnZHkjNE5kxM0d1qSBvYLNHlCAADQFYhSuKW2NkOf7a/SsotitH+Qv7ImJ+ixqYkaQIwCAOBV
-iFK4lbY2Q3/dV6nleXYdPOaM0ZAgf2VNccZoeDAxCgCANyJK4RYcbYY++bZSy/NsslXXS5JC+vjr
-0SmJemxKosKCA0yeEAAAdCeiFKZytBn6eO9RLd9ol/2iGH1saqIenZKosL7EKAAAvQFRClM42gx9
-9M1RLd9oU9HxBklSaB9/PTY1SVlTEohRAAB6GaIUParV0aa/fHNUKzbaVXzCGaNhfQM0d2qi5kxJ
-UGgfYhQAgN6IKEWPaHW06c97jmrFJrtK2mM0PDhAj09L0iOT4hVCjAIA0KsRpehWrY42/enrI3p1
-k12lNWclSQOCAzR3WpLmTE5Q/yD+CgIAAKIU3aTF0aY/7T6iFZvsKqt1xujAfoF6fFqSHp4UT4wC
-AIBLUAboUi2ONm3YXaEVm+wqrz0nSYroF6h505P0s7R49SNGAQDAZVAI6BLNrW1av7tCr26yq+Kk
-M0Yj+1+I0eBA/qoBAIAroxRwXZpb2/T+V+V6bVORjpw6H6NBemJGkn56S7z6BvqZPCEAAPAERCk6
-panVofd3Vei1TXYdrWuUJA0KCdITM5L10MQ4YhQAAHQIUYoOaWp16L3Ccr2WX6TK9hiNOh+jt8Sp
-TwAxCgAAOo4oxTVpbHHo3cJyrcwvUtVpZ4wODg3SkzOS9a8TiVEAAHB9iFJcVWOLQ/+7s0wrC4p0
-7HSTJGlIaB89lZ6sB8bHEqMAAKBLEKW4rMYWh/64o0yrCopUfcYZo9FhffTUzGQ9MCFWQf7EKAAA
-6DpEKS5xrtmhd3Yc1uubi3W8PUaHhvXRU+kW3T8+hhgFAADdgiiFpAsxuqqgWCfqnTE6LLyvnk63
-6L5xMQr09zV5QgAA4M2I0l7ubHOr1v79sN7YXKwT9c2SpJgBzhi9dywxCgAAegZR2ks1NLVqzd8P
-67ebi1XT4IzR2IF9tSDdonvGxijAjxgFAAA9hyjtZRqaWvX29sP67ZZi1bbHaNzAYC2YZdFPxgwj
-RgEAgCmI0l6ivqlVf/iyVL/bUqyTZ1skSfERwVqQbtFsYhQAAJiMKPVyZxpbnDG6tUSn2mM0MbKf
-FqRbdHfqUPkTowAAwA0QpV7qdGOL/rDNGaN155wxmhTZT89kWHTXKGIUAAC4F6LUy5xubNHqraV6
-c2uxTje2SpKSBvXTwllW3TV6qPx8fUyeEAAA4IeIUi9Rd65Fv99aot9vK9GZ9hi1RPXXM7MsunMU
-MQoAANwbUerh6s626M1tJVp9UYxao/prYYZVd4yMJkYBAIBHIEo91KmzzXpza4ne2laqM03OGE0Z
-3B6jI6LlS4wCAAAPQpR6mJMN7TH6Zanq22N0+OAQZWdaddvNQ4hRAADgkYhSD1Hb0KzfbSnWH74s
-VUOzQ5J0w5AQZWdY9X+IUQAA4OGIUjdXU9+k324p0dvbS3W2PUZvig7VwgyrfnTTYGIUAAB4BaLU
-TdXUN+mNLcVas/2wK0ZvHhqq7Ayrbr1psHx8iFEAAOA9iFI3c6K+SW9sdsbouRZnjI4YFqrsjBRl
-3hhFjAIAAK9ElLqJ6jONeqOgWGt3HFZjS5skaVRMmLIzrJp1AzEKAAC8G1FqsuozjXq9oFjvXBSj
-o2PCtCgzRTOHDyJGAQBAr0CUmqT6dKNWFhTpjzvK1NTqjNHU2HBlZ1o1M4UYBQAAvQtR2sOq6hq1
-qqBIf9xZpub2GB0bF67szBRNt0YSowAAoFciSntIZd05rcov0rrCcleMjosfoEWZVk21EKMAAKB3
-I0q72dFT57Qyv0jvFpar2eGM0QkJA5SdkaIplghiFAAAQERptzly6pxW5tv1XmGFK0YnJg7Uogyr
-JiUTowAAABcjSrtYxcmzei2/SO/vKleLw5Ak3ZI4UIsyUzQpOcLk6QAAANwTUdpFymvP6rV8uz74
-qsIVo5OSIpSdaVVaEjEKAABwNW4RpTabTXPmzNGJEycUFhamt956SzfffLPZY12T8tqzenWTM0Zb
-25wxOsUSoeyMFE1MHGjydAAAAJ7BLaJ0/vz5mjdvnrKysvTBBx8oKytLhYWFZo91VWU1Z7Vik00b
-dh9xxehUS6SyM62akECMAgAAdITpUVpdXa1du3bp888/lyTde++9WrBggex2uywWi8nT/VDpiQat
-2GTXn74+Ikd7jE6zRmpRplXj4olRAACAzjA9SsvLyxUdHS1/f+coPj4+iouLU1lZ2Q+itKmpSU1N
-TZccczgcPTJn9elG/fqzg/pwz4UYnZEySAszrBoXP6BHZgAAAPBWpkdpRyxZskQvvvjiJcfS0tJ6
-5Ln9/Xz16b5KOdoMzRw+SNkZVo2JI0YBAAC6go9hGIaZA1RXV8tisai2tlb+/v4yDEPR0dHaunXr
-NV0pfeGFF5STk9Mjs27YXaGkQf2VGhveI88HAADQW/iaPUBUVJTGjh2rtWvXSpLWr1+vmJiYy/48
-aVBQkEJDQy+5+fn59dis94yNIUgBAAC6gVu8ff/6668rKytLL730kkJDQ7V69WqzRwIAAEAPcoso
-HT58uLZv3272GAAAADCJ6W/fAwAAAEQpAAAATEeUAgAAwHREKQAAAExHlAIAAMB0RCkAAABMR5QC
-AADAdEQpAAAATEeUAgAAwHQ+hmEYZg9xPe655x4lJCT0yHM5HA7t3LlTEydOlJ+fX488J7oe++gd
-2EfvwD56B/bRO3TnPsbHxys7O/uqX+PxUdqTTp8+rbCwMNXV1Sk0NNTscdBJ7KN3YB+9A/voHdhH
-72D2PvL2PQAAAExHlAIAAMB0RCkAAABMR5R2QFBQkH75y18qKCjI7FFwHdhH78A+egf20Tuwj97B
-7H3kg04AAAAwHVdKAQAAYDqiFAAAAKYjSgEAAGA6ovQa2Ww2TZ48WSkpKZowYYL2799v9ki4goSE
-BA0fPlypqalKTU3Vu+++K+nqe8j+mm/hwoVKSEiQj4+P9uzZ4zre2X1jT81xpX280utSYh/dUWNj
-o2bPnq2UlBSNHj1at956q+x2uySpurpat912m6xWq0aMGKHNmze77tfZNXSPq+3jzJkzlZiY6HpN
-/uY3v3Hdz7R9NHBN0tPTjdWrVxuGYRjvv/++MX78eHMHwhXFx8cbX3/99Q+OX20P2V/zFRQUGOXl
-5T/Yv87uG3tqjivt45Vel4bBPrqjc+fOGZ988onR1tZmGIZhLF++3JgxY4ZhGIbx6KOPGr/85S8N
-wzCMnTt3GsOGDTOam5uvaw3d42r7OGPGDONPf/rTZe9n1j4Spdfg2LFjRkhIiNHS0mIYhmG0tbUZ
-gwcPNmw2m8mT4XIu983vanvI/rqXi/evs/vGnprvWqOUffQMhYWFRnx8vGEYhtGvXz+jsrLStTZh
-wgTjiy++uK419IyL9/FqUWrWPvL2/TUoLy9XdHS0/P39JUk+Pj6Ki4tTWVmZyZPhSh555BGNHDlS
-jz32mI4fP37VPWR/3Vdn9409dU//+LqUOr/H6Fk5OTm6++67VVNTo5aWFg0ZMsS1lpCQoLKysk6v
-oeec38fznnvuOY0cOVIPPvigiouLJcnUfSRK4XU2b96svXv3avfu3YqMjNScOXPMHgno9Xhdeq6X
-XnpJdrtdS5YsMXsUXId/3Mc1a9bowIED2rt3r6ZNm6Y777zT5AmJ0msSGxuryspKtba2SpIMw1BZ
-WZni4uJMngyXc35fAgICtGjRIm3ZsuWqe8j+uq/O7ht76n4u97qUOr/H6Bkvv/yyNmzYoE8//VTB
-wcGKiIiQv7+/qqqqXF9TWlqquLi4Tq+h+/3jPkrO157kfAdiwYIFKi4uVk1Njan7SJReg6ioKI0d
-O1Zr166VJK1fv14xMTGyWCwmT4Z/1NDQoFOnTrn+vG7dOo0ZM+aqe8j+uq/O7ht76l6u9LqUOr/H
-6H5Lly7VunXr9MUXXyg8PNx1/P7779eqVaskSYWFhTpy5IhmzJhxXWvoPpfbx9bWVh07dsz1NevX
-r9fgwYMVEREhycR97JKfTO0FDhw4YKSlpRlWq9UYN26csXfvXrNHwmUUFRUZqampxsiRI40RI0YY
-//Iv/2KUlJQYhnH1PWR/zTdv3jxj2LBhhp+fnxEVFWUkJycbhtH5fWNPzXG5fbza69Iw2Ed3VF5e
-bkgykpKSjNGjRxujR482Jk6caBiGYVRVVRm33nqrYbFYjJtuusnYuHGj636dXUP3uNI+1tfXG+PG
-jTNGjBhhjBo1ypg1a5axZ88e1/3M2kcfwzCMrslbAAAAoHN4+x4AAACmI0oBAABgOqIUAAAApiNK
-AQAAYDqiFAAAAKYjSgEAAGA6ohQAAACmI0oBAABgOqIUAAAApiNKAQAAYDqiFAAAAKb7/wGRY5kM
-APfqjAAAAABJRU5ErkJggg==
-">
-      </div>
-      <script type="text/javascript">
-        (() => {
-          const chartElement = document.getElementById("chart-2f431633-f527-4c67-9abb-4ca54088d566");
-          async function getCodeForChartHandler(event) {
-            const chartCodeResponse =  await google.colab.kernel.invokeFunction(
-                'getCodeForChart', ["chart-2f431633-f527-4c67-9abb-4ca54088d566"], {});
-            const responseJson = chartCodeResponse.data['application/json'];
-            await google.colab.notebook.addCell(responseJson.code, 'code');
-          }
-          chartElement.onclick = getCodeForChartHandler;
-        })();
-      </script>
-      <style>
-        .colab-quickchart-chart-with-code  {
-            display: block;
-            float: left;
-            border: 1px solid transparent;
-        }
-
-        .colab-quickchart-chart-with-code:hover {
-            cursor: pointer;
-            border: 1px solid #aaa;
-        }
-      </style></div></div>
+</div></div></div>
 </div>
 </section>
 </section>

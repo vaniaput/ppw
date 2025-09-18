@@ -46,6 +46,6 @@ Here is a preview of the cell contents:
 -------------------
 ['import requests', 'from bs4 import BeautifulSoup', 'import pandas as pd', 'import time', 'import sys']
 ...
-['    print("---")', '    return df', '', '# Menjalankan fungsi utama', 'scrape_manajemen_all_data()']
+['    print("Data disimpan di pta_manajemen_raw.csv")', '    return df', '', 'if __name__ == "__main__":', '    scrape_manajemen_raw()']
 -------------------
 
