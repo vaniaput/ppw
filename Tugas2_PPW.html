@@ -422,20 +422,19 @@ document.write(`
 <p>Crawling adalah proses otomatis untuk mengambil data dari internet. Jika biasanya kita mencari dan menyalin informasi manual, crawling membuat komputer melakukannya sendiri, misalnya mengumpulkan judul, abstrak, dan link jurnal dari Springer secara cepat dan terstruktur.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">sprynger</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">sprynger</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: sprynger in c:\users\raihan fadillah\appdata\local\programs\python\python313\lib\site-packages (0.4.1)
-Requirement already satisfied: lxml in c:\users\raihan fadillah\appdata\local\programs\python\python313\lib\site-packages (from sprynger) (6.0.1)
-Requirement already satisfied: requests in c:\users\raihan fadillah\appdata\local\programs\python\python313\lib\site-packages (from sprynger) (2.32.5)
-Requirement already satisfied: urllib3 in c:\users\raihan fadillah\appdata\local\programs\python\python313\lib\site-packages (from sprynger) (2.5.0)
-Requirement already satisfied: platformdirs in c:\users\raihan fadillah\appdata\local\programs\python\python313\lib\site-packages (from sprynger) (4.4.0)
-Requirement already satisfied: charset_normalizer&lt;4,&gt;=2 in c:\users\raihan fadillah\appdata\local\programs\python\python313\lib\site-packages (from requests-&gt;sprynger) (3.4.3)
-Requirement already satisfied: idna&lt;4,&gt;=2.5 in c:\users\raihan fadillah\appdata\local\programs\python\python313\lib\site-packages (from requests-&gt;sprynger) (3.10)
-Requirement already satisfied: certifi&gt;=2017.4.17 in c:\users\raihan fadillah\appdata\local\programs\python\python313\lib\site-packages (from requests-&gt;sprynger) (2025.8.3)
-Note: you may need to restart the kernel to use updated packages.
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: sprynger in /usr/local/lib/python3.12/dist-packages (0.4.1)
+Requirement already satisfied: lxml in /usr/local/lib/python3.12/dist-packages (from sprynger) (5.4.0)
+Requirement already satisfied: requests in /usr/local/lib/python3.12/dist-packages (from sprynger) (2.32.4)
+Requirement already satisfied: urllib3 in /usr/local/lib/python3.12/dist-packages (from sprynger) (2.5.0)
+Requirement already satisfied: platformdirs in /usr/local/lib/python3.12/dist-packages (from sprynger) (4.3.8)
+Requirement already satisfied: charset_normalizer&lt;4,&gt;=2 in /usr/local/lib/python3.12/dist-packages (from requests-&gt;sprynger) (3.4.3)
+Requirement already satisfied: idna&lt;4,&gt;=2.5 in /usr/local/lib/python3.12/dist-packages (from requests-&gt;sprynger) (3.10)
+Requirement already satisfied: certifi&gt;=2017.4.17 in /usr/local/lib/python3.12/dist-packages (from requests-&gt;sprynger) (2025.8.3)
 </pre></div>
 </div>
 </div>
@@ -446,7 +445,7 @@ Note: you may need to restart the kernel to use updated packages.
 <h1><strong>Import Library</strong><a class="headerlink" href="#import-library" title="Link to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 </pre></div>
 </div>
@@ -458,7 +457,7 @@ Note: you may need to restart the kernel to use updated packages.
 <h1><strong>Menyiapkan API Key dan URL API</strong><a class="headerlink" href="#menyiapkan-api-key-dan-url-api" title="Link to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">api_key</span> <span class="o">=</span> <span class="s2">&quot;6bcc13d850fe0788fc38b6433765777c&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">api_key</span> <span class="o">=</span> <span class="s2">&quot;6bcc13d850fe0788fc38b6433765777c&quot;</span>
 <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://api.springernature.com/meta/v2/json&quot;</span>
 </pre></div>
 </div>
@@ -470,7 +469,7 @@ Note: you may need to restart the kernel to use updated packages.
 <h1><strong>Menentukan Kata Kunci Pencarian</strong><a class="headerlink" href="#menentukan-kata-kunci-pencarian" title="Link to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">keywords</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;web mining&quot;</span><span class="p">,</span> <span class="s2">&quot;web usage mining&quot;</span><span class="p">,</span> <span class="s2">&quot;information retrieval&quot;</span><span class="p">]</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">keywords</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;web mining&quot;</span><span class="p">,</span> <span class="s2">&quot;web usage mining&quot;</span><span class="p">,</span> <span class="s2">&quot;information retrieval&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -481,7 +480,7 @@ Note: you may need to restart the kernel to use updated packages.
 <h1><strong>Menyediakan wadah untuk menyimpan hasil</strong><a class="headerlink" href="#menyediakan-wadah-untuk-menyimpan-hasil" title="Link to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">all_results</span> <span class="o">=</span> <span class="p">[]</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">all_results</span> <span class="o">=</span> <span class="p">[]</span>
 </pre></div>
 </div>
 </div>
@@ -492,7 +491,7 @@ Note: you may need to restart the kernel to use updated packages.
 <h1><strong>Proses crawling untuk setiap kata kunci</strong><a class="headerlink" href="#proses-crawling-untuk-setiap-kata-kunci" title="Link to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">keyword</span> <span class="ow">in</span> <span class="n">keywords</span><span class="p">:</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">keyword</span> <span class="ow">in</span> <span class="n">keywords</span><span class="p">:</span>
     <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;q&quot;</span><span class="p">:</span> <span class="n">keyword</span><span class="p">,</span>
         <span class="s2">&quot;api_key&quot;</span><span class="p">:</span> <span class="n">api_key</span><span class="p">,</span>
@@ -510,7 +509,7 @@ Note: you may need to restart the kernel to use updated packages.
 <h1><strong>Mengecek apakah request berhasil</strong><a class="headerlink" href="#mengecek-apakah-request-berhasil" title="Link to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
     <span class="n">total</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;result&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;total&#39;</span><span class="p">]</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Kata kunci &#39;</span><span class="si">{</span><span class="n">keyword</span><span class="si">}</span><span class="s2">&#39; menghasilkan </span><span class="si">{</span><span class="n">total</span><span class="si">}</span><span class="s2"> hasil (ditampilkan sebagian).&quot;</span><span class="p">)</span>
@@ -529,7 +528,7 @@ Note: you may need to restart the kernel to use updated packages.
 <h1><strong>Menyimpan data penting dari hasil pencarian</strong><a class="headerlink" href="#menyimpan-data-penting-dari-hasil-pencarian" title="Link to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;records&#39;</span><span class="p">]:</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;records&#39;</span><span class="p">]:</span>
     <span class="n">all_results</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
         <span class="s2">&quot;keyword&quot;</span><span class="p">:</span> <span class="n">keyword</span><span class="p">,</span>
         <span class="s2">&quot;doi&quot;</span><span class="p">:</span> <span class="n">record</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;doi&#39;</span><span class="p">,</span> <span class="s1">&#39;N/A&#39;</span><span class="p">),</span>
@@ -549,7 +548,7 @@ Note: you may need to restart the kernel to use updated packages.
 <h1><strong>Menyimpan hasil ke file CSV</strong><a class="headerlink" href="#menyimpan-hasil-ke-file-csv" title="Link to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;springer_crawling.csv&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;springer_crawling.csv&quot;</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">all_results</span><span class="p">)</span>
 <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
 
@@ -569,7 +568,7 @@ Note: you may need to restart the kernel to use updated packages.
 <h1><strong>Mengunduh file CSV</strong><a class="headerlink" href="#mengunduh-file-csv" title="Link to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">google.colab</span><span class="w"> </span><span class="kn">import</span> <span class="n">files</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">google.colab</span><span class="w"> </span><span class="kn">import</span> <span class="n">files</span>
 <span class="n">files</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s2">&quot;springer_crawling.csv&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
