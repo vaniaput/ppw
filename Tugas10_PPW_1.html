@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Word Graph &#8212; PPW</title>
+    <title>Word Graph 2 &#8212; PPW</title>
   
   
   
@@ -60,7 +60,6 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'Tugas10_PPW_1';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Word Graph" href="Tugas10_PPW_2.html" />
     <link rel="prev" title="Crawwling X Hastag dan Keyword" href="Tugas9_PPW.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -215,9 +214,7 @@
 
 <li class="toctree-l1"><a class="reference internal" href="Tugas9_PPW.html"><strong>Crawwling X Hastag dan Keyword</strong></a></li>
 
-<li class="toctree-l1 current active"><a class="current reference internal" href="#"><strong>Word Graph</strong></a></li>
-
-<li class="toctree-l1"><a class="reference internal" href="Tugas10_PPW_2.html"><strong>Word Graph</strong></a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><strong>Word Graph 2</strong></a></li>
 
 </ul>
 
@@ -404,7 +401,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Word Graph</h1>
+    <h1>Word Graph 2</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -414,20 +411,26 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#"><strong>Word Graph</strong></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#"><strong>Word Graph 2</strong></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pendahuluan">Pendahuluan</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dataset">Dataset</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installasi-pymupdf">Installasi pymupdf</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#menghubungkan-drive">Menghubungkan Drive</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#membaca-paper-dan-membuat-file-txt">Membaca Paper dan Membuat file txt</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installasi-nltk">Installasi nltk</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installasi-library-nltk">Installasi Library nltk</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#membaca-file-txt">Membaca file txt</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#membaca-kalimat">Membaca kalimat</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mengubah-sekumpulan-data-list-menjadi-bentuk-tabel-dataframe">Mengubah sekumpulan data (list) menjadi bentuk tabel (DataFrame)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ekstraksi-teks-dari-pdf">Ekstraksi Teks dari PDF</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preprocessing-teks">Preprocessing Teks</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tokenisasi-bigram-dan-tf-idf">Tokenisasi Bigram dan TF-IDF</a></li>
 </ul>
 </li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#import-data-di-atas-menjadi-csv">Import data di atas menjadi csv</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#untuk-membuat-word-graph">Untuk membuat word graph</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lanjutkan-dengan-menggunakan-https-www-geeksforgeeks-org-nlp-co-occurence-matrix-in-nlp">Lanjutkan dengan menggunakan https://www.geeksforgeeks.org/nlp/co-occurence-matrix-in-nlp/</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#ekstraksi-20-kata-penting">Ekstraksi 20 Kata Penting</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pembangunan-graph-kata">Pembangunan Graph Kata</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-centrality">Analisis Centrality</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hasil-analisis-centrality">Hasil Analisis Centrality</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualisasi-graph-kata">Visualisasi Graph Kata</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretasi-hasil">Interpretasi Hasil</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kesimpulan">Kesimpulan</a></li>
 </ul>
 </li>
 </ul>
@@ -442,18 +445,63 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="word-graph">
-<h1><strong>Word Graph</strong><a class="headerlink" href="#word-graph" title="Link to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="word-graph-2">
+<h1><strong>Word Graph 2</strong><a class="headerlink" href="#word-graph-2" title="Link to this heading">#</a></h1>
+<section id="pendahuluan">
+<h2>Pendahuluan<a class="headerlink" href="#pendahuluan" title="Link to this heading">#</a></h2>
+<p>Proyek ini merupakan tugas Ujian Akhir Semester (UAS) mata kuliah Pengolahan dan Pencarian Web (PPW). Tujuan dari proyek ini adalah mengekstraksi kata-kata penting dari sebuah dokumen jurnal ilmiah menggunakan tokenisasi dua kata (bigram), kemudian menganalisis keterhubungan kata tersebut menggunakan pendekatan graph dan beberapa metode centrality.</p>
+<p>Dataset yang digunakan berupa dokumen jurnal dalam format PDF. Proses dilakukan mulai dari ekstraksi teks, preprocessing, pembentukan bigram, pemilihan 20 kata penting, hingga analisis centrality.</p>
+</section>
+<section id="dataset">
+<h2>Dataset<a class="headerlink" href="#dataset" title="Link to this heading">#</a></h2>
+<p>Dataset yang digunakan adalah satu dokumen jurnal ilmiah (PDF) yang berisi artikel tentang kesehatan. Teks jurnal diekstraksi menggunakan pustaka PyMuPDF sehingga dapat diproses lebih lanjut dalam bentuk teks.</p>
+</section>
 <section id="installasi-pymupdf">
 <h2>Installasi pymupdf<a class="headerlink" href="#installasi-pymupdf" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">upgrade</span> <span class="n">pymupdf</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">upgrade</span> <span class="n">pymupdf</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: pymupdf in /usr/local/lib/python3.12/dist-packages (1.26.7)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Defaulting to user installation because normal site-packages is not writeable
+Collecting pymupdf
+  Downloading pymupdf-1.26.7-cp310-abi3-win_amd64.whl.metadata (3.4 kB)
+Downloading pymupdf-1.26.7-cp310-abi3-win_amd64.whl (18.4 MB)
+   ---------------------------------------- 0.0/18.4 MB ? eta -:--:--
+   - -------------------------------------- 0.5/18.4 MB 4.6 MB/s eta 0:00:04
+   -- ------------------------------------- 1.0/18.4 MB 3.6 MB/s eta 0:00:05
+   --- ------------------------------------ 1.6/18.4 MB 3.1 MB/s eta 0:00:06
+   ----- ---------------------------------- 2.4/18.4 MB 3.2 MB/s eta 0:00:06
+   ------ --------------------------------- 3.1/18.4 MB 3.3 MB/s eta 0:00:05
+   -------- ------------------------------- 3.9/18.4 MB 3.4 MB/s eta 0:00:05
+   ---------- ----------------------------- 4.7/18.4 MB 3.4 MB/s eta 0:00:05
+   ------------ --------------------------- 5.8/18.4 MB 3.6 MB/s eta 0:00:04
+   -------------- ------------------------- 6.6/18.4 MB 3.7 MB/s eta 0:00:04
+   --------------- ------------------------ 7.3/18.4 MB 3.6 MB/s eta 0:00:04
+   ------------------ --------------------- 8.4/18.4 MB 3.7 MB/s eta 0:00:03
+   ------------------ --------------------- 8.7/18.4 MB 3.7 MB/s eta 0:00:03
+   -------------------- ------------------- 9.4/18.4 MB 3.6 MB/s eta 0:00:03
+   ---------------------- ----------------- 10.2/18.4 MB 3.6 MB/s eta 0:00:03
+   ------------------------ --------------- 11.3/18.4 MB 3.7 MB/s eta 0:00:02
+   -------------------------- ------------- 12.1/18.4 MB 3.7 MB/s eta 0:00:02
+   --------------------------- ------------ 12.8/18.4 MB 3.8 MB/s eta 0:00:02
+   ------------------------------ --------- 13.9/18.4 MB 3.8 MB/s eta 0:00:02
+   ------------------------------- -------- 14.7/18.4 MB 3.8 MB/s eta 0:00:01
+   --------------------------------- ------ 15.5/18.4 MB 3.8 MB/s eta 0:00:01
+   ----------------------------------- ---- 16.5/18.4 MB 3.8 MB/s eta 0:00:01
+   ------------------------------------- -- 17.0/18.4 MB 3.8 MB/s eta 0:00:01
+   -------------------------------------- - 17.6/18.4 MB 3.8 MB/s eta 0:00:01
+   ---------------------------------------  18.1/18.4 MB 3.8 MB/s eta 0:00:01
+   ---------------------------------------- 18.4/18.4 MB 3.7 MB/s  0:00:05
+Installing collected packages: pymupdf
+Successfully installed pymupdf-1.26.7
+Note: you may need to restart the kernel to use updated packages.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[notice] A new release of pip is available: 25.2 -&gt; 25.3
+[notice] To update, run: python.exe -m pip install --upgrade pip
 </pre></div>
 </div>
 </div>
@@ -463,7 +511,7 @@ document.write(`
 <h2>Menghubungkan Drive<a class="headerlink" href="#menghubungkan-drive" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">google.colab</span><span class="w"> </span><span class="kn">import</span> <span class="n">drive</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">google.colab</span><span class="w"> </span><span class="kn">import</span> <span class="n">drive</span>
 <span class="n">drive</span><span class="o">.</span><span class="n">mount</span><span class="p">(</span><span class="s1">&#39;/content/drive&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -479,7 +527,7 @@ document.write(`
 <h2>Membaca Paper dan Membuat file txt<a class="headerlink" href="#membaca-paper-dan-membuat-file-txt" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pymupdf</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pymupdf</span>
 
 <span class="n">doc</span> <span class="o">=</span> <span class="n">pymupdf</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;kanker_payudara.pdf&quot;</span><span class="p">)</span> <span class="c1"># open a document</span>
 <span class="n">out</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;kanker_payudara.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="c1"># create a text output</span>
@@ -497,16 +545,22 @@ document.write(`
 <h2>Installasi nltk<a class="headerlink" href="#installasi-nltk" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="err">!</span><span class="n">pip</span> <span class="n">install</span> <span class="n">nltk</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>nltk
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: nltk in /usr/local/lib/python3.12/dist-packages (3.9.1)
-Requirement already satisfied: click in /usr/local/lib/python3.12/dist-packages (from nltk) (8.3.1)
-Requirement already satisfied: joblib in /usr/local/lib/python3.12/dist-packages (from nltk) (1.5.2)
-Requirement already satisfied: regex&gt;=2021.8.3 in /usr/local/lib/python3.12/dist-packages (from nltk) (2025.11.3)
-Requirement already satisfied: tqdm in /usr/local/lib/python3.12/dist-packages (from nltk) (4.67.1)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Defaulting to user installation because normal site-packages is not writeable
+Requirement already satisfied: nltk in c:\users\raihan fadillah\appdata\roaming\python\python314\site-packages (3.9.2)
+Requirement already satisfied: click in c:\users\raihan fadillah\appdata\roaming\python\python314\site-packages (from nltk) (8.3.0)
+Requirement already satisfied: joblib in c:\users\raihan fadillah\appdata\roaming\python\python314\site-packages (from nltk) (1.5.2)
+Requirement already satisfied: regex&gt;=2021.8.3 in c:\users\raihan fadillah\appdata\roaming\python\python314\site-packages (from nltk) (2025.9.18)
+Requirement already satisfied: tqdm in c:\users\raihan fadillah\appdata\roaming\python\python314\site-packages (from nltk) (4.67.1)
+Requirement already satisfied: colorama in c:\users\raihan fadillah\appdata\roaming\python\python314\site-packages (from click-&gt;nltk) (0.4.6)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[notice] A new release of pip is available: 25.2 -&gt; 25.3
+[notice] To update, run: python.exe -m pip install --upgrade pip
 </pre></div>
 </div>
 </div>
@@ -516,17 +570,19 @@ Requirement already satisfied: tqdm in /usr/local/lib/python3.12/dist-packages (
 <h2>Installasi Library nltk<a class="headerlink" href="#installasi-library-nltk" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">nltk</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">nltk</span>
 <span class="n">nltk</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s1">&#39;punkt&#39;</span><span class="p">)</span>  <span class="c1"># hanya perlu sekali</span>
 <span class="n">nltk</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s1">&#39;punkt_tab&#39;</span><span class="p">)</span>  <span class="c1"># opsional, untuk versi terbaru NLTK (≥3.8.2)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[nltk_data] Downloading package punkt to /root/nltk_data...
-[nltk_data]   Package punkt is already up-to-date!
-[nltk_data] Downloading package punkt_tab to /root/nltk_data...
-[nltk_data]   Package punkt_tab is already up-to-date!
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[nltk_data] Downloading package punkt to C:\Users\Raihan
+[nltk_data]     Fadillah\AppData\Roaming\nltk_data...
+[nltk_data]   Unzipping tokenizers\punkt.zip.
+[nltk_data] Downloading package punkt_tab to C:\Users\Raihan
+[nltk_data]     Fadillah\AppData\Roaming\nltk_data...
+[nltk_data]   Unzipping tokenizers\punkt_tab.zip.
 </pre></div>
 </div>
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>True
@@ -535,234 +591,95 @@ Requirement already satisfied: tqdm in /usr/local/lib/python3.12/dist-packages (
 </div>
 </div>
 </section>
-<section id="membaca-file-txt">
-<h2>Membaca file txt<a class="headerlink" href="#membaca-file-txt" title="Link to this heading">#</a></h2>
+<section id="ekstraksi-teks-dari-pdf">
+<h2>Ekstraksi Teks dari PDF<a class="headerlink" href="#ekstraksi-teks-dari-pdf" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;kanker_payudara.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
-    <span class="n">teks</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">fitz</span> <span class="c1"># PyMuPDF</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">teks</span><span class="p">[:</span><span class="mi">200</span><span class="p">])</span>  <span class="c1"># tampilkan 200 karakter pertama</span>
+<span class="n">pdf_path</span> <span class="o">=</span> <span class="s2">&quot;kanker_payudara.pdf&quot;</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="n">fitz</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">pdf_path</span><span class="p">)</span>
+
+<span class="n">full_text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="k">for</span> <span class="n">page</span> <span class="ow">in</span> <span class="n">doc</span><span class="p">:</span>
+    <span class="n">full_text</span> <span class="o">+=</span> <span class="n">page</span><span class="o">.</span><span class="n">get_text</span><span class="p">()</span>
+
+<span class="n">full_text</span><span class="p">[:</span><span class="mi">500</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Diterima Redaksi : 24-10-2019 | Selesai Revisi : 26-11-2019 | Diterbitkan Online : 10-12-2019 
-458 
- 
- 
-Terakreditasi SINTA Peringkat 2 
-Surat Keputusan Dirjen Penguatan Riset dan Pengembangan Ristek 
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;Diterima Redaksi : 24-10-2019 | Selesai Revisi : 26-11-2019 | Diterbitkan Online : 10-12-2019 \n458 \n \n \nTerakreditasi SINTA Peringkat 2 \nSurat Keputusan Dirjen Penguatan Riset dan Pengembangan Ristek Dikti No. 10/E/KPT/2019 \nmasa berlaku mulai Vol. 1 No. 1 tahun 2017 s.d  Vol. 5 No. 3 tahun 2021 \n \nTerbit online pada laman web jurnal: http://jurnal.iaii.or.id \n \nJURNAL RESTI \n(Rekayasa Sistem dan Teknologi Informasi)  \n  Vol. 3 No. 3 (2019) 458 - 469 \n     ISSN Media Elektronik: 2580-0760 \n \nPen&#39;
 </pre></div>
 </div>
 </div>
 </div>
 </section>
-<section id="membaca-kalimat">
-<h2>Membaca kalimat<a class="headerlink" href="#membaca-kalimat" title="Link to this heading">#</a></h2>
+<section id="preprocessing-teks">
+<h2>Preprocessing Teks<a class="headerlink" href="#preprocessing-teks" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install: pip install nltk</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">nltk</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">string</span>
 
-
-<span class="c1">#text = &quot;Ini adalah kalimat pertama. Ini kalimat kedua? Ya!&quot;</span>
-<span class="n">all_words</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="n">sentences</span> <span class="o">=</span> <span class="n">nltk</span><span class="o">.</span><span class="n">sent_tokenize</span><span class="p">(</span><span class="n">teks</span><span class="p">)</span>
-<span class="c1"># Output: [&#39;Ini adalah kalimat pertama.&#39;, &#39;Ini kalimat kedua?&#39;, &#39;Ya!&#39;]</span>
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="mengubah-sekumpulan-data-list-menjadi-bentuk-tabel-dataframe">
-<h2>Mengubah sekumpulan data (list) menjadi bentuk tabel (DataFrame)<a class="headerlink" href="#mengubah-sekumpulan-data-list-menjadi-bentuk-tabel-dataframe" title="Link to this heading">#</a></h2>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">sentences</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;kalimat&#39;</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                                               kalimat
-0    Diterima Redaksi : 24-10-2019 | Selesai Revisi...
-1              10/E/KPT/2019 \nmasa berlaku mulai Vol.
-2                                                1 No.
-3                               1 tahun 2017 s.d  Vol.
-4                                                5 No.
-..                                                 ...
-649  Morgan \nKaufmann division of Academic Press, ...
-650  [67] E. \nPrasetyo, \nData \nMining: \nKonsep ...
-651        Yogyakarta, Indonesia: Andi Offset, \n2012.
-652  [68] T. Sutojo, E. Mulyanto, and V. Suhartono,...
-653          Yogyakarta, Indonesia: Andi Offset, 2011.
-
-[654 rows x 1 columns]
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="import-data-di-atas-menjadi-csv">
-<h1>Import data di atas menjadi csv<a class="headerlink" href="#import-data-di-atas-menjadi-csv" title="Link to this heading">#</a></h1>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;kalimat.csv&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<section id="untuk-membuat-word-graph">
-<h2>Untuk membuat word graph<a class="headerlink" href="#untuk-membuat-word-graph" title="Link to this heading">#</a></h2>
-</section>
-<section id="lanjutkan-dengan-menggunakan-https-www-geeksforgeeks-org-nlp-co-occurence-matrix-in-nlp">
-<h2>Lanjutkan dengan menggunakan <a class="reference external" href="https://www.geeksforgeeks.org/nlp/co-occurence-matrix-in-nlp/">https://www.geeksforgeeks.org/nlp/co-occurence-matrix-in-nlp/</a><a class="headerlink" href="#lanjutkan-dengan-menggunakan-https-www-geeksforgeeks-org-nlp-co-occurence-matrix-in-nlp" title="Link to this heading">#</a></h2>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">fitz</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">defaultdict</span><span class="p">,</span> <span class="n">Counter</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">extract_all_words_from_pdf</span><span class="p">(</span><span class="n">pdf_path</span><span class="p">):</span>
-    <span class="n">doc</span> <span class="o">=</span> <span class="n">fitz</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">pdf_path</span><span class="p">)</span>
-    <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-
-    <span class="k">for</span> <span class="n">page</span> <span class="ow">in</span> <span class="n">doc</span><span class="p">:</span>
-        <span class="n">text</span> <span class="o">+=</span> <span class="n">page</span><span class="o">.</span><span class="n">get_text</span><span class="p">()</span>
-
-    <span class="n">doc</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-
-    <span class="c1"># Bersihkan ringan (JANGAN buang kata penting)</span>
-    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\d+&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
-    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[^\w\s]&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">preprocess_text</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
     <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\d+&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="nb">str</span><span class="o">.</span><span class="n">maketrans</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">.</span><span class="n">punctuation</span><span class="p">))</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\s+&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">text</span>
 
-    <span class="c1"># SPLIT LANGSUNG → semua kata muncul</span>
-    <span class="n">all_words</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
-
-    <span class="k">return</span> <span class="n">all_words</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">all_words</span> <span class="o">=</span> <span class="n">extract_all_words_from_pdf</span><span class="p">(</span><span class="s2">&quot;kanker_payudara.pdf&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">window_size</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="n">co_occurrences</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="n">Counter</span><span class="p">)</span>
-
-<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">word</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">all_words</span><span class="p">):</span>
-    <span class="n">start</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="n">window_size</span><span class="p">)</span>
-    <span class="n">end</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">all_words</span><span class="p">),</span> <span class="n">i</span> <span class="o">+</span> <span class="n">window_size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-
-    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">j</span><span class="p">:</span>
-            <span class="n">neighbor</span> <span class="o">=</span> <span class="n">all_words</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
-            <span class="n">co_occurrences</span><span class="p">[</span><span class="n">word</span><span class="p">][</span><span class="n">neighbor</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">unique_words</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">co_occurrences</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-<span class="n">word_index</span> <span class="o">=</span> <span class="p">{</span><span class="n">word</span><span class="p">:</span> <span class="n">idx</span> <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">word</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">unique_words</span><span class="p">)}</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">co_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
-    <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">unique_words</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">unique_words</span><span class="p">)),</span>
-    <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span>
-<span class="p">)</span>
-
-<span class="k">for</span> <span class="n">word</span><span class="p">,</span> <span class="n">neighbors</span> <span class="ow">in</span> <span class="n">co_occurrences</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-    <span class="k">for</span> <span class="n">neighbor</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">neighbors</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="k">if</span> <span class="n">neighbor</span> <span class="ow">in</span> <span class="n">word_index</span><span class="p">:</span>
-            <span class="n">co_matrix</span><span class="p">[</span><span class="n">word_index</span><span class="p">[</span><span class="n">word</span><span class="p">]][</span><span class="n">word_index</span><span class="p">[</span><span class="n">neighbor</span><span class="p">]]</span> <span class="o">=</span> <span class="n">count</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">nltk</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">nltk.corpus</span><span class="w"> </span><span class="kn">import</span> <span class="n">stopwords</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">nltk.tokenize</span><span class="w"> </span><span class="kn">import</span> <span class="n">word_tokenize</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">defaultdict</span><span class="p">,</span> <span class="n">Counter</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
-
-<span class="c1"># Download NLTK resources</span>
-<span class="n">nltk</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s1">&#39;punkt&#39;</span><span class="p">)</span>
-<span class="n">nltk</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s1">&#39;stopwords&#39;</span><span class="p">)</span>
-
-<span class="c1"># Sample text</span>
-<span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;Kanker Payudara merupakan kanker yang paling sering ditemukan pada wanita dan tingkat kematiannya masih berada pada</span>
-<span class="s2">posisi dua di antara penyakit kanker laiinya&quot;&quot;&quot;</span>
-
-<span class="c1"># Preprocess the text</span>
-<span class="n">stop_words</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s1">&#39;english&#39;</span><span class="p">))</span>
-<span class="n">words</span> <span class="o">=</span> <span class="n">word_tokenize</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
-<span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span> <span class="k">if</span> <span class="n">word</span><span class="o">.</span><span class="n">isalnum</span><span class="p">()</span> <span class="ow">and</span> <span class="n">word</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">stop_words</span><span class="p">]</span>
-
-<span class="c1"># Define the window size for co-occurrence</span>
-<span class="n">window_size</span> <span class="o">=</span> <span class="mi">2</span>
-
-<span class="c1"># Create a list of co-occurring word pairs</span>
-<span class="n">co_occurrences</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="n">Counter</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">word</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
-    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="n">window_size</span><span class="p">),</span> <span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">),</span> <span class="n">i</span> <span class="o">+</span> <span class="n">window_size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)):</span>
-        <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">j</span><span class="p">:</span>
-            <span class="n">co_occurrences</span><span class="p">[</span><span class="n">word</span><span class="p">][</span><span class="n">words</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
-
-<span class="c1"># Create a list of unique words</span>
-<span class="n">unique_words</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">words</span><span class="p">))</span>
-
-<span class="c1"># Initialize the co-occurrence matrix</span>
-<span class="n">co_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">unique_words</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">unique_words</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
-
-<span class="c1"># Populate the co-occurrence matrix</span>
-<span class="n">word_index</span> <span class="o">=</span> <span class="p">{</span><span class="n">word</span><span class="p">:</span> <span class="n">idx</span> <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">word</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">unique_words</span><span class="p">)}</span>
-<span class="k">for</span> <span class="n">word</span><span class="p">,</span> <span class="n">neighbors</span> <span class="ow">in</span> <span class="n">co_occurrences</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-    <span class="k">for</span> <span class="n">neighbor</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">neighbors</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="n">co_matrix</span><span class="p">[</span><span class="n">word_index</span><span class="p">[</span><span class="n">word</span><span class="p">]][</span><span class="n">word_index</span><span class="p">[</span><span class="n">neighbor</span><span class="p">]]</span> <span class="o">=</span> <span class="n">count</span>
-
-<span class="c1"># Create a DataFrame for better readability</span>
-<span class="n">co_matrix_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">co_matrix</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">unique_words</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">unique_words</span><span class="p">)</span>
-
-<span class="c1"># Display the co-occurrence matrix</span>
-<span class="n">co_matrix_df</span>
+<span class="n">clean_text</span> <span class="o">=</span> <span class="n">preprocess_text</span><span class="p">(</span><span class="n">full_text</span><span class="p">)</span>
+<span class="n">clean_text</span><span class="p">[:</span><span class="mi">500</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[nltk_data] Downloading package punkt to /root/nltk_data...
-[nltk_data]   Package punkt is already up-to-date!
-[nltk_data] Downloading package stopwords to /root/nltk_data...
-[nltk_data]   Package stopwords is already up-to-date!
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;diterima redaksi selesai revisi diterbitkan online terakreditasi sinta peringkat surat keputusan dirjen penguatan riset dan pengembangan ristek dikti no ekpt masa berlaku mulai vol no tahun sd vol no tahun terbit online pada laman web jurnal httpjurnaliaiiorid jurnal resti rekayasa sistem dan teknologi informasi vol no issn media elektronik pendekatan machine learning yang efisien untuk prediksi kanker payudara azminuddin i s azis irma surya kumala idris budy santoso yasin aril mustofa jurusan t&#39;
 </pre></div>
 </div>
-<div class="output text_html">
-  <div id="df-b7997fec-befa-47f4-be97-80161025ca12" class="colab-df-container">
-    <div>
+</div>
+</div>
+</section>
+<section id="tokenisasi-bigram-dan-tf-idf">
+<h2>Tokenisasi Bigram dan TF-IDF<a class="headerlink" href="#tokenisasi-bigram-dan-tf-idf" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.feature_extraction.text</span><span class="w"> </span><span class="kn">import</span> <span class="n">TfidfVectorizer</span>
+
+<span class="n">vectorizer</span> <span class="o">=</span> <span class="n">TfidfVectorizer</span><span class="p">(</span>
+    <span class="n">ngram_range</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span>
+    <span class="n">stop_words</span><span class="o">=</span><span class="s1">&#39;english&#39;</span><span class="p">,</span>
+    <span class="n">max_features</span><span class="o">=</span><span class="mi">100</span>
+    <span class="p">)</span>
+
+<span class="n">tfidf_matrix</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">([</span><span class="n">clean_text</span><span class="p">])</span>
+<span class="n">feature_names</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">get_feature_names_out</span><span class="p">()</span>
+<span class="n">scores</span> <span class="o">=</span> <span class="n">tfidf_matrix</span><span class="o">.</span><span class="n">toarray</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="ekstraksi-20-kata-penting">
+<h1>Ekstraksi 20 Kata Penting<a class="headerlink" href="#ekstraksi-20-kata-penting" title="Link to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="n">tfidf_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s1">&#39;Bigram&#39;</span><span class="p">:</span> <span class="n">feature_names</span><span class="p">,</span>
+    <span class="s1">&#39;Score&#39;</span><span class="p">:</span> <span class="n">scores</span>
+    <span class="p">})</span>
+
+<span class="n">top_20</span> <span class="o">=</span> <span class="n">tfidf_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;Score&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">top_20</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
@@ -780,832 +697,437 @@ Surat Keputusan Dirjen Penguatan Riset dan Pengembangan Ristek
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>wanita</th>
-      <th>laiinya</th>
-      <th>merupakan</th>
-      <th>penyakit</th>
-      <th>dua</th>
-      <th>dan</th>
-      <th>yang</th>
-      <th>kematiannya</th>
-      <th>ditemukan</th>
-      <th>masih</th>
-      <th>berada</th>
-      <th>tingkat</th>
-      <th>posisi</th>
-      <th>paling</th>
-      <th>antara</th>
-      <th>kanker</th>
-      <th>sering</th>
-      <th>di</th>
-      <th>payudara</th>
-      <th>pada</th>
+      <th>Bigram</th>
+      <th>Score</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>wanita</th>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
+      <th>9</th>
+      <td>breast cancer</td>
+      <td>0.375735</td>
     </tr>
     <tr>
-      <th>laiinya</th>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
+      <th>90</th>
+      <td>vol pp</td>
+      <td>0.254736</td>
     </tr>
     <tr>
-      <th>merupakan</th>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>2</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
+      <th>97</th>
+      <td>yang terbaik</td>
+      <td>0.229262</td>
     </tr>
     <tr>
-      <th>penyakit</th>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>1</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
+      <th>18</th>
+      <td>dengan akurasi</td>
+      <td>0.184683</td>
     </tr>
     <tr>
-      <th>dua</th>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>1</td>
+      <th>42</th>
+      <td>machine learning</td>
+      <td>0.165578</td>
     </tr>
     <tr>
-      <th>dan</th>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
+      <th>21</th>
+      <td>digunakan untuk</td>
+      <td>0.159210</td>
     </tr>
     <tr>
-      <th>yang</th>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>1</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
+      <th>62</th>
+      <td>pada dataset</td>
+      <td>0.152841</td>
     </tr>
     <tr>
-      <th>kematiannya</th>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
+      <th>34</th>
+      <td>jurnal resti</td>
+      <td>0.152841</td>
     </tr>
     <tr>
-      <th>ditemukan</th>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
+      <th>13</th>
+      <td>dan teknologi</td>
+      <td>0.146473</td>
     </tr>
     <tr>
-      <th>masih</th>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
+      <th>31</th>
+      <td>informasi vol</td>
+      <td>0.146473</td>
     </tr>
     <tr>
-      <th>berada</th>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
+      <th>68</th>
+      <td>rekayasa sistem</td>
+      <td>0.146473</td>
     </tr>
     <tr>
-      <th>tingkat</th>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
+      <th>69</th>
+      <td>resti rekayasa</td>
+      <td>0.146473</td>
     </tr>
     <tr>
-      <th>posisi</th>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>1</td>
+      <th>82</th>
+      <td>teknologi informasi</td>
+      <td>0.146473</td>
     </tr>
     <tr>
-      <th>paling</th>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
+      <th>77</th>
+      <td>sistem dan</td>
+      <td>0.146473</td>
     </tr>
     <tr>
-      <th>antara</th>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
+      <th>66</th>
+      <td>prediksi kp</td>
+      <td>0.140105</td>
     </tr>
     <tr>
-      <th>kanker</th>
-      <td>0</td>
-      <td>1</td>
-      <td>2</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>2</td>
-      <td>0</td>
+      <th>48</th>
+      <td>metode ml</td>
+      <td>0.133736</td>
     </tr>
     <tr>
-      <th>sering</th>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
+      <th>61</th>
+      <td>nn mm</td>
+      <td>0.127368</td>
     </tr>
     <tr>
-      <th>di</th>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
+      <th>49</th>
+      <td>metode yang</td>
+      <td>0.127368</td>
     </tr>
     <tr>
-      <th>payudara</th>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>2</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
+      <th>37</th>
+      <td>kinerja yang</td>
+      <td>0.127368</td>
     </tr>
     <tr>
-      <th>pada</th>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
+      <th>20</th>
+      <td>di mana</td>
+      <td>0.114631</td>
     </tr>
   </tbody>
 </table>
+</div></div></div>
 </div>
-    <div class="colab-df-buttons">
-
-  <div class="colab-df-container">
-    <button class="colab-df-convert" onclick="convertToInteractive('df-b7997fec-befa-47f4-be97-80161025ca12')"
-            title="Convert this dataframe to an interactive table."
-            style="display:none;">
-
-  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960">
-    <path d="M120-120v-720h720v720H120Zm60-500h600v-160H180v160Zm220 220h160v-160H400v160Zm0 220h160v-160H400v160ZM180-400h160v-160H180v160Zm440 0h160v-160H620v160ZM180-180h160v-160H180v160Zm440 0h160v-160H620v160Z"/>
-  </svg>
-    </button>
-
-  <style>
-    .colab-df-container {
-      display:flex;
-      gap: 12px;
-    }
-
-    .colab-df-convert {
-      background-color: #E8F0FE;
-      border: none;
-      border-radius: 50%;
-      cursor: pointer;
-      display: none;
-      fill: #1967D2;
-      height: 32px;
-      padding: 0 0 0 0;
-      width: 32px;
-    }
-
-    .colab-df-convert:hover {
-      background-color: #E2EBFA;
-      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);
-      fill: #174EA6;
-    }
-
-    .colab-df-buttons div {
-      margin-bottom: 4px;
-    }
-
-    [theme=dark] .colab-df-convert {
-      background-color: #3B4455;
-      fill: #D2E3FC;
-    }
-
-    [theme=dark] .colab-df-convert:hover {
-      background-color: #434B5C;
-      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
-      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));
-      fill: #FFFFFF;
-    }
-  </style>
-
-    <script>
-      const buttonEl =
-        document.querySelector('#df-b7997fec-befa-47f4-be97-80161025ca12 button.colab-df-convert');
-      buttonEl.style.display =
-        google.colab.kernel.accessAllowed ? 'block' : 'none';
-
-      async function convertToInteractive(key) {
-        const element = document.querySelector('#df-b7997fec-befa-47f4-be97-80161025ca12');
-        const dataTable =
-          await google.colab.kernel.invokeFunction('convertToInteractive',
-                                                    [key], {});
-        if (!dataTable) return;
-
-        const docLinkHtml = 'Like what you see? Visit the ' +
-          '<a target="_blank" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'
-          + ' to learn more about interactive tables.';
-        element.innerHTML = '';
-        dataTable['output_type'] = 'display_data';
-        await google.colab.output.renderOutput(dataTable, element);
-        const docLink = document.createElement('div');
-        docLink.innerHTML = docLinkHtml;
-        element.appendChild(docLink);
-      }
-    </script>
-  </div>
-
-
-    <div id="df-23f82ba5-fccf-4dbd-b702-426fd05ac919">
-      <button class="colab-df-quickchart" onclick="quickchart('df-23f82ba5-fccf-4dbd-b702-426fd05ac919')"
-                title="Suggest charts"
-                style="display:none;">
-
-<svg xmlns="http://www.w3.org/2000/svg" height="24px"viewBox="0 0 24 24"
-     width="24px">
-    <g>
-        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
-    </g>
-</svg>
-      </button>
-
-<style>
-  .colab-df-quickchart {
-      --bg-color: #E8F0FE;
-      --fill-color: #1967D2;
-      --hover-bg-color: #E2EBFA;
-      --hover-fill-color: #174EA6;
-      --disabled-fill-color: #AAA;
-      --disabled-bg-color: #DDD;
-  }
-
-  [theme=dark] .colab-df-quickchart {
-      --bg-color: #3B4455;
-      --fill-color: #D2E3FC;
-      --hover-bg-color: #434B5C;
-      --hover-fill-color: #FFFFFF;
-      --disabled-bg-color: #3B4455;
-      --disabled-fill-color: #666;
-  }
-
-  .colab-df-quickchart {
-    background-color: var(--bg-color);
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    display: none;
-    fill: var(--fill-color);
-    height: 32px;
-    padding: 0;
-    width: 32px;
-  }
-
-  .colab-df-quickchart:hover {
-    background-color: var(--hover-bg-color);
-    box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
-    fill: var(--button-hover-fill-color);
-  }
-
-  .colab-df-quickchart-complete:disabled,
-  .colab-df-quickchart-complete:disabled:hover {
-    background-color: var(--disabled-bg-color);
-    fill: var(--disabled-fill-color);
-    box-shadow: none;
-  }
-
-  .colab-df-spinner {
-    border: 2px solid var(--fill-color);
-    border-color: transparent;
-    border-bottom-color: var(--fill-color);
-    animation:
-      spin 1s steps(1) infinite;
-  }
-
-  @keyframes spin {
-    0% {
-      border-color: transparent;
-      border-bottom-color: var(--fill-color);
-      border-left-color: var(--fill-color);
-    }
-    20% {
-      border-color: transparent;
-      border-left-color: var(--fill-color);
-      border-top-color: var(--fill-color);
-    }
-    30% {
-      border-color: transparent;
-      border-left-color: var(--fill-color);
-      border-top-color: var(--fill-color);
-      border-right-color: var(--fill-color);
-    }
-    40% {
-      border-color: transparent;
-      border-right-color: var(--fill-color);
-      border-top-color: var(--fill-color);
-    }
-    60% {
-      border-color: transparent;
-      border-right-color: var(--fill-color);
-    }
-    80% {
-      border-color: transparent;
-      border-right-color: var(--fill-color);
-      border-bottom-color: var(--fill-color);
-    }
-    90% {
-      border-color: transparent;
-      border-bottom-color: var(--fill-color);
-    }
-  }
-</style>
-
-      <script>
-        async function quickchart(key) {
-          const quickchartButtonEl =
-            document.querySelector('#' + key + ' button');
-          quickchartButtonEl.disabled = true;  // To prevent multiple clicks.
-          quickchartButtonEl.classList.add('colab-df-spinner');
-          try {
-            const charts = await google.colab.kernel.invokeFunction(
-                'suggestCharts', [key], {});
-          } catch (error) {
-            console.error('Error during call to suggestCharts:', error);
-          }
-          quickchartButtonEl.classList.remove('colab-df-spinner');
-          quickchartButtonEl.classList.add('colab-df-quickchart-complete');
-        }
-        (() => {
-          let quickchartButtonEl =
-            document.querySelector('#df-23f82ba5-fccf-4dbd-b702-426fd05ac919 button');
-          quickchartButtonEl.style.display =
-            google.colab.kernel.accessAllowed ? 'block' : 'none';
-        })();
-      </script>
-    </div>
-
-  <div id="id_c6ee08ac-7a10-4a32-908c-e85f9bf356ee">
-    <style>
-      .colab-df-generate {
-        background-color: #E8F0FE;
-        border: none;
-        border-radius: 50%;
-        cursor: pointer;
-        display: none;
-        fill: #1967D2;
-        height: 32px;
-        padding: 0 0 0 0;
-        width: 32px;
-      }
-
-      .colab-df-generate:hover {
-        background-color: #E2EBFA;
-        box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);
-        fill: #174EA6;
-      }
-
-      [theme=dark] .colab-df-generate {
-        background-color: #3B4455;
-        fill: #D2E3FC;
-      }
-
-      [theme=dark] .colab-df-generate:hover {
-        background-color: #434B5C;
-        box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
-        filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));
-        fill: #FFFFFF;
-      }
-    </style>
-    <button class="colab-df-generate" onclick="generateWithVariable('co_matrix_df')"
-            title="Generate code using this dataframe."
-            style="display:none;">
-
-  <svg xmlns="http://www.w3.org/2000/svg" height="24px"viewBox="0 0 24 24"
-       width="24px">
-    <path d="M7,19H8.4L18.45,9,17,7.55,7,17.6ZM5,21V16.75L18.45,3.32a2,2,0,0,1,2.83,0l1.4,1.43a1.91,1.91,0,0,1,.58,1.4,1.91,1.91,0,0,1-.58,1.4L9.25,21ZM18.45,9,17,7.55Zm-12,3A5.31,5.31,0,0,0,4.9,8.1,5.31,5.31,0,0,0,1,6.5,5.31,5.31,0,0,0,4.9,4.9,5.31,5.31,0,0,0,6.5,1,5.31,5.31,0,0,0,8.1,4.9,5.31,5.31,0,0,0,12,6.5,5.46,5.46,0,0,0,6.5,12Z"/>
-  </svg>
-    </button>
-    <script>
-      (() => {
-      const buttonEl =
-        document.querySelector('#id_c6ee08ac-7a10-4a32-908c-e85f9bf356ee button.colab-df-generate');
-      buttonEl.style.display =
-        google.colab.kernel.accessAllowed ? 'block' : 'none';
-
-      buttonEl.onclick = () => {
-        google.colab.notebook.generateWithVariable('co_matrix_df');
-      }
-      })();
-    </script>
-  </div>
-
-    </div>
-  </div>
-</div></div>
-</div>
+<section id="pembangunan-graph-kata">
+<h2>Pembangunan Graph Kata<a class="headerlink" href="#pembangunan-graph-kata" title="Link to this heading">#</a></h2>
+<p>Graph dibangun menggunakan NetworkX, di mana node merepresentasikan kata dan edge merepresentasikan hubungan antar kata dalam bigram.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">window_size</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="n">co_occurrences</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="n">Counter</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">networkx</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nx</span>
 
-<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">word</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">all_words</span><span class="p">):</span>
-    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="n">window_size</span><span class="p">),</span> <span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">all_words</span><span class="p">),</span> <span class="n">i</span> <span class="o">+</span> <span class="n">window_size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)):</span>
-        <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">j</span><span class="p">:</span>
-            <span class="n">co_occurrences</span><span class="p">[</span><span class="n">word</span><span class="p">][</span><span class="n">all_words</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
 
-<span class="c1"># Daftar kata unik</span>
-<span class="n">unique_words</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">all_words</span><span class="p">))</span>
-<span class="n">word_index</span> <span class="o">=</span> <span class="p">{</span><span class="n">word</span><span class="p">:</span> <span class="n">idx</span> <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">word</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">unique_words</span><span class="p">)}</span>
-
-<span class="c1"># Matriks co-occurrence</span>
-<span class="n">co_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">unique_words</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">unique_words</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">word</span><span class="p">,</span> <span class="n">neighbors</span> <span class="ow">in</span> <span class="n">co_occurrences</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-    <span class="k">for</span> <span class="n">neighbor</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">neighbors</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="n">co_matrix</span><span class="p">[</span><span class="n">word_index</span><span class="p">[</span><span class="n">word</span><span class="p">]][</span><span class="n">word_index</span><span class="p">[</span><span class="n">neighbor</span><span class="p">]]</span> <span class="o">=</span> <span class="n">count</span>
+<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">top_20</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+    <span class="n">w1</span><span class="p">,</span> <span class="n">w2</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;Bigram&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+    <span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">w1</span><span class="p">,</span> <span class="n">w2</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;Score&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
 </div>
+</section>
+<section id="analisis-centrality">
+<h2>Analisis Centrality<a class="headerlink" href="#analisis-centrality" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">networkx</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pagerank</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">pagerank</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+
+<span class="n">degree</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">degree_centrality</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+
+<span class="n">betweenness</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">betweenness_centrality</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+
+<span class="n">closeness</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">closeness_centrality</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="hasil-analisis-centrality">
+<h2>Hasil Analisis Centrality<a class="headerlink" href="#hasil-analisis-centrality" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">centrality_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s1">&#39;PageRank&#39;</span><span class="p">:</span> <span class="n">pagerank</span><span class="p">,</span>
+    <span class="s1">&#39;Degree Centrality&#39;</span><span class="p">:</span> <span class="n">degree</span><span class="p">,</span>
+    <span class="s1">&#39;Betweenness Centrality&#39;</span><span class="p">:</span> <span class="n">betweenness</span><span class="p">,</span>
+    <span class="s1">&#39;Closeness Centrality&#39;</span><span class="p">:</span> <span class="n">closeness</span>
+    <span class="p">})</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;PageRank&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">centrality_df</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: networkx in /usr/local/lib/python3.12/dist-packages (3.6.1)
-</pre></div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>PageRank</th>
+      <th>Degree Centrality</th>
+      <th>Betweenness Centrality</th>
+      <th>Closeness Centrality</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>yang</th>
+      <td>0.061135</td>
+      <td>0.103448</td>
+      <td>0.012315</td>
+      <td>0.110345</td>
+    </tr>
+    <tr>
+      <th>vol</th>
+      <td>0.042341</td>
+      <td>0.068966</td>
+      <td>0.017241</td>
+      <td>0.076100</td>
+    </tr>
+    <tr>
+      <th>resti</th>
+      <td>0.038773</td>
+      <td>0.068966</td>
+      <td>0.017241</td>
+      <td>0.076100</td>
+    </tr>
+    <tr>
+      <th>metode</th>
+      <td>0.036395</td>
+      <td>0.068966</td>
+      <td>0.007389</td>
+      <td>0.091954</td>
+    </tr>
+    <tr>
+      <th>rekayasa</th>
+      <td>0.035809</td>
+      <td>0.068966</td>
+      <td>0.029557</td>
+      <td>0.091954</td>
+    </tr>
+    <tr>
+      <th>sistem</th>
+      <td>0.034541</td>
+      <td>0.068966</td>
+      <td>0.036946</td>
+      <td>0.105090</td>
+    </tr>
+    <tr>
+      <th>dan</th>
+      <td>0.033702</td>
+      <td>0.068966</td>
+      <td>0.039409</td>
+      <td>0.110345</td>
+    </tr>
+    <tr>
+      <th>digunakan</th>
+      <td>0.033333</td>
+      <td>0.034483</td>
+      <td>0.000000</td>
+      <td>0.034483</td>
+    </tr>
+    <tr>
+      <th>pada</th>
+      <td>0.033333</td>
+      <td>0.034483</td>
+      <td>0.000000</td>
+      <td>0.034483</td>
+    </tr>
+    <tr>
+      <th>untuk</th>
+      <td>0.033333</td>
+      <td>0.034483</td>
+      <td>0.000000</td>
+      <td>0.034483</td>
+    </tr>
+    <tr>
+      <th>learning</th>
+      <td>0.033333</td>
+      <td>0.034483</td>
+      <td>0.000000</td>
+      <td>0.034483</td>
+    </tr>
+    <tr>
+      <th>machine</th>
+      <td>0.033333</td>
+      <td>0.034483</td>
+      <td>0.000000</td>
+      <td>0.034483</td>
+    </tr>
+    <tr>
+      <th>akurasi</th>
+      <td>0.033333</td>
+      <td>0.034483</td>
+      <td>0.000000</td>
+      <td>0.034483</td>
+    </tr>
+    <tr>
+      <th>dengan</th>
+      <td>0.033333</td>
+      <td>0.034483</td>
+      <td>0.000000</td>
+      <td>0.034483</td>
+    </tr>
+    <tr>
+      <th>mm</th>
+      <td>0.033333</td>
+      <td>0.034483</td>
+      <td>0.000000</td>
+      <td>0.034483</td>
+    </tr>
+    <tr>
+      <th>prediksi</th>
+      <td>0.033333</td>
+      <td>0.034483</td>
+      <td>0.000000</td>
+      <td>0.034483</td>
+    </tr>
+    <tr>
+      <th>kp</th>
+      <td>0.033333</td>
+      <td>0.034483</td>
+      <td>0.000000</td>
+      <td>0.034483</td>
+    </tr>
+    <tr>
+      <th>nn</th>
+      <td>0.033333</td>
+      <td>0.034483</td>
+      <td>0.000000</td>
+      <td>0.034483</td>
+    </tr>
+    <tr>
+      <th>dataset</th>
+      <td>0.033333</td>
+      <td>0.034483</td>
+      <td>0.000000</td>
+      <td>0.034483</td>
+    </tr>
+    <tr>
+      <th>mana</th>
+      <td>0.033333</td>
+      <td>0.034483</td>
+      <td>0.000000</td>
+      <td>0.034483</td>
+    </tr>
+    <tr>
+      <th>cancer</th>
+      <td>0.033333</td>
+      <td>0.034483</td>
+      <td>0.000000</td>
+      <td>0.034483</td>
+    </tr>
+    <tr>
+      <th>breast</th>
+      <td>0.033333</td>
+      <td>0.034483</td>
+      <td>0.000000</td>
+      <td>0.034483</td>
+    </tr>
+    <tr>
+      <th>di</th>
+      <td>0.033333</td>
+      <td>0.034483</td>
+      <td>0.000000</td>
+      <td>0.034483</td>
+    </tr>
+    <tr>
+      <th>teknologi</th>
+      <td>0.032991</td>
+      <td>0.068966</td>
+      <td>0.036946</td>
+      <td>0.105090</td>
+    </tr>
+    <tr>
+      <th>informasi</th>
+      <td>0.032162</td>
+      <td>0.068966</td>
+      <td>0.029557</td>
+      <td>0.091954</td>
+    </tr>
+    <tr>
+      <th>terbaik</th>
+      <td>0.029617</td>
+      <td>0.034483</td>
+      <td>0.000000</td>
+      <td>0.068966</td>
+    </tr>
+    <tr>
+      <th>pp</th>
+      <td>0.027852</td>
+      <td>0.034483</td>
+      <td>0.000000</td>
+      <td>0.061303</td>
+    </tr>
+    <tr>
+      <th>jurnal</th>
+      <td>0.021830</td>
+      <td>0.034483</td>
+      <td>0.000000</td>
+      <td>0.061303</td>
+    </tr>
+    <tr>
+      <th>ml</th>
+      <td>0.020844</td>
+      <td>0.034483</td>
+      <td>0.000000</td>
+      <td>0.061303</td>
+    </tr>
+    <tr>
+      <th>kinerja</th>
+      <td>0.018676</td>
+      <td>0.034483</td>
+      <td>0.000000</td>
+      <td>0.068966</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
 </div>
-</div>
-</div>
+</section>
+<section id="visualisasi-graph-kata">
+<h2>Visualisasi Graph Kata<a class="headerlink" href="#visualisasi-graph-kata" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">networkx</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nx</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 
-<span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">pos</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">spring_layout</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 
-<span class="k">for</span> <span class="n">word</span><span class="p">,</span> <span class="n">neighbors</span> <span class="ow">in</span> <span class="n">co_occurrences</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-    <span class="k">for</span> <span class="n">neighbor</span><span class="p">,</span> <span class="n">weight</span> <span class="ow">in</span> <span class="n">neighbors</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">neighbor</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">nx</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span>
+    <span class="n">with_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">node_size</span><span class="o">=</span><span class="mi">1500</span><span class="p">,</span>
+    <span class="n">node_color</span><span class="o">=</span><span class="s1">&#39;skyblue&#39;</span><span class="p">,</span>
+    <span class="n">font_size</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 
-<span class="n">pos</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">spring_layout</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
-
-<span class="n">nx</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span>
-    <span class="n">G</span><span class="p">,</span>
-    <span class="n">pos</span><span class="p">,</span>
-    <span class="n">with_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>       <span class="c1"># Label = kata</span>
-    <span class="n">node_size</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
-    <span class="n">node_color</span><span class="o">=</span><span class="s1">&#39;lightblue&#39;</span><span class="p">,</span>
-    <span class="n">font_size</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
-    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
-    <span class="n">edge_color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span>
-<span class="p">)</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Word Graph (Semua Kata dari PDF Kanker Payudara)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Graph Kata Penting (Bigram)&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/f984c889bd42f3afbb46b3aa5b8d62e045421b0bf451d4d6f1cfcf8511fff90a.png" src="_images/f984c889bd42f3afbb46b3aa5b8d62e045421b0bf451d4d6f1cfcf8511fff90a.png" />
+<img alt="_images/e949cbb048f765829359a6a01ceb24ea07534052eea457fa12d85310bbb9f735.png" src="_images/e949cbb048f765829359a6a01ceb24ea07534052eea457fa12d85310bbb9f735.png" />
 </div>
 </div>
+</section>
+<section id="interpretasi-hasil">
+<h2>Interpretasi Hasil<a class="headerlink" href="#interpretasi-hasil" title="Link to this heading">#</a></h2>
+<p>Kata dengan nilai PageRank tertinggi menunjukkan kata yang paling berpengaruh dalam dokumen jurnal. Degree Centrality menggambarkan seberapa sering suatu kata terhubung dengan kata lain. Betweenness Centrality menunjukkan peran kata sebagai penghubung antar topik, sedangkan Closeness Centrality menunjukkan kedekatan suatu kata dengan kata lain dalam graph.</p>
+</section>
+<section id="kesimpulan">
+<h2>Kesimpulan<a class="headerlink" href="#kesimpulan" title="Link to this heading">#</a></h2>
+<p>Berdasarkan hasil eksperimen, dapat disimpulkan bahwa metode tokenisasi bigram dan analisis centrality mampu mengidentifikasi kata-kata penting dalam dokumen jurnal. Pendekatan berbasis graph memberikan gambaran keterhubungan antar konsep dalam dokumen.</p>
+<p>Pengembangan selanjutnya dapat dilakukan dengan mengintegrasikan model berbasis Hugging Face untuk meningkatkan kualitas ekstraksi kata kunci dan melakukan deployment pada platform web statis.</p>
 </section>
 </section>
 
@@ -1648,15 +1170,6 @@ Surat Keputusan Dirjen Penguatan Riset dan Pengembangan Ristek
         <p class="prev-next-title"><strong>Crawwling X Hastag dan Keyword</strong></p>
       </div>
     </a>
-    <a class="right-next"
-       href="Tugas10_PPW_2.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><strong>Word Graph</strong></p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
 </div>
                 </footer>
               
@@ -1673,20 +1186,26 @@ Surat Keputusan Dirjen Penguatan Riset dan Pengembangan Ristek
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#"><strong>Word Graph</strong></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#"><strong>Word Graph 2</strong></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pendahuluan">Pendahuluan</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dataset">Dataset</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installasi-pymupdf">Installasi pymupdf</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#menghubungkan-drive">Menghubungkan Drive</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#membaca-paper-dan-membuat-file-txt">Membaca Paper dan Membuat file txt</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installasi-nltk">Installasi nltk</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installasi-library-nltk">Installasi Library nltk</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#membaca-file-txt">Membaca file txt</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#membaca-kalimat">Membaca kalimat</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mengubah-sekumpulan-data-list-menjadi-bentuk-tabel-dataframe">Mengubah sekumpulan data (list) menjadi bentuk tabel (DataFrame)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ekstraksi-teks-dari-pdf">Ekstraksi Teks dari PDF</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preprocessing-teks">Preprocessing Teks</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tokenisasi-bigram-dan-tf-idf">Tokenisasi Bigram dan TF-IDF</a></li>
 </ul>
 </li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#import-data-di-atas-menjadi-csv">Import data di atas menjadi csv</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#untuk-membuat-word-graph">Untuk membuat word graph</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lanjutkan-dengan-menggunakan-https-www-geeksforgeeks-org-nlp-co-occurence-matrix-in-nlp">Lanjutkan dengan menggunakan https://www.geeksforgeeks.org/nlp/co-occurence-matrix-in-nlp/</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#ekstraksi-20-kata-penting">Ekstraksi 20 Kata Penting</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pembangunan-graph-kata">Pembangunan Graph Kata</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-centrality">Analisis Centrality</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hasil-analisis-centrality">Hasil Analisis Centrality</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualisasi-graph-kata">Visualisasi Graph Kata</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretasi-hasil">Interpretasi Hasil</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kesimpulan">Kesimpulan</a></li>
 </ul>
 </li>
 </ul>
